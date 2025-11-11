@@ -1,0 +1,135 @@
+type ChronoGrid_AutoClaimFailed {
+  id: ID!
+  user: String!
+  gridId: String!
+  timeperiodId: BigInt!
+  reason: String!
+}
+
+type ChronoGrid_AutoClaimSkipped {
+  id: ID!
+  user: String!
+  gridId: String!
+  timeperiodId: BigInt!
+}
+
+type ChronoGrid_BetPlaced {
+  id: ID!
+  user: String!
+  gridId: String!
+  timeperiodId: BigInt!
+  amountPaid: BigInt!
+  sharesReceived: BigInt!
+  pricePerShare: BigInt!
+  bAtEntry: BigInt!
+  totalshare: BigInt!
+  priceMin: BigInt!
+  priceMax: BigInt!
+}
+
+type ChronoGrid_GlobalLiquidityAdded {
+  id: ID!
+  amount: BigInt!
+  newTotal: BigInt!
+}
+
+type ChronoGrid_GridCreated {
+  id: ID!
+  gridId: String!
+  timeperiodId: BigInt!
+  priceMin: BigInt!
+  priceMax: BigInt!
+}
+
+type ChronoGrid_MaxBetAmountUpdated {
+  id: ID!
+  oldAmount: BigInt!
+  newAmount: BigInt!
+}
+
+type ChronoGrid_OwnershipTransferred {
+  id: ID!
+  previousOwner: String!
+  newOwner: String!
+}
+
+type ChronoGrid_TimeperiodCreated {
+  id: ID!
+  timeperiodId: BigInt!
+  startTime: BigInt!
+  endTime: BigInt!
+  referencePrice: BigInt!
+  allocatedLiquidity: BigInt!
+}
+
+type ChronoGrid_TimeperiodFinalized {
+  id: ID!
+  timeperiodId: BigInt!
+  netResult: BigInt!
+  returnedToGlobal: BigInt!
+  newGlobalPool: BigInt!
+}
+
+type ChronoGrid_TimeperiodSettled {
+  id: ID!
+  timeperiodId: BigInt!
+  winningGridId: String!
+  twapPrice: BigInt!
+  totalLoserBets: BigInt!
+  poolShare: BigInt!
+  winnerShare: BigInt!
+}
+
+type ChronoGrid_WinningsClaimedEqual {
+  id: ID!
+  user: String!
+  gridId: String!
+  equalShare: BigInt!
+  redemptionValue: BigInt!
+  totalPayout: BigInt!
+}
+
+type ChronoGrid_WrapperSet {
+  id: ID!
+  oldWrapper: String!
+  newWrapper: String!
+}
+
+type ChronoGridWrapper_BetPlacedWithSession {
+  id: ID!
+  user: String!
+  sessionKey: String!
+  timeperiodId: BigInt!
+  amount: BigInt!
+  sharesReceived: BigInt!
+  priceMin: BigInt!
+  priceMax: BigInt!
+  startTime: BigInt!
+  endTime: BigInt!
+  gridId: String!
+}
+
+type ChronoGridWrapper_Deposited {
+  id: ID!
+  user: String!
+  amount: BigInt!
+  newBalance: BigInt!
+}
+
+type ChronoGridWrapper_EIP712DomainChanged {
+  id: ID!
+}
+
+type ChronoGridWrapper_RelayerUpdated {
+  id: ID!
+  oldRelayer: String!
+  newRelayer: String!
+}
+
+type ChronoGridWrapper_Withdrawn {
+  id: ID!
+  user: String!
+  amount: BigInt!
+  newBalance: BigInt!
+}
+
