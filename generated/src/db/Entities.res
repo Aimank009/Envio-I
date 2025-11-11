@@ -313,6 +313,69 @@ module ChronoGridWrapper_EIP712DomainChanged = {
   external castToInternal: t => Internal.entity = "%identity"
 }
 
+module ChronoGridWrapper_FinalBalance = {
+  let name = (ChronoGridWrapper_FinalBalance :> string)
+  @genType
+  type t = {
+    id: id,
+    newBalance: bigint,
+    user: string,
+  }
+
+  let schema = S.object((s): t => {
+    id: s.field("id", S.string),
+    newBalance: s.field("newBalance", BigInt.schema),
+    user: s.field("user", S.string),
+  })
+
+  let rowsSchema = S.array(schema)
+
+  @genType
+  type indexedFieldOperations = {
+    
+  }
+
+  let table = mkTable(
+    (name :> string),
+    ~fields=[
+      mkField(
+      "id", 
+      Text,
+      ~fieldSchema=S.string,
+      ~isPrimaryKey,
+      
+      
+      
+      
+      ),
+      mkField(
+      "newBalance", 
+      Numeric,
+      ~fieldSchema=BigInt.schema,
+      
+      
+      
+      
+      
+      ),
+      mkField(
+      "user", 
+      Text,
+      ~fieldSchema=S.string,
+      
+      
+      
+      
+      
+      ),
+    ],
+  )
+
+  let entityHistory = table->EntityHistory.fromTable(~schema)
+
+  external castToInternal: t => Internal.entity = "%identity"
+}
+
 module ChronoGridWrapper_RelayerUpdated = {
   let name = (ChronoGridWrapper_RelayerUpdated :> string)
   @genType
@@ -807,6 +870,57 @@ module ChronoGrid_GlobalLiquidityAdded = {
       
       
       ),
+      mkField(
+      "id", 
+      Text,
+      ~fieldSchema=S.string,
+      ~isPrimaryKey,
+      
+      
+      
+      
+      ),
+      mkField(
+      "newTotal", 
+      Numeric,
+      ~fieldSchema=BigInt.schema,
+      
+      
+      
+      
+      
+      ),
+    ],
+  )
+
+  let entityHistory = table->EntityHistory.fromTable(~schema)
+
+  external castToInternal: t => Internal.entity = "%identity"
+}
+
+module ChronoGrid_GlobalLiquidityUpdated = {
+  let name = (ChronoGrid_GlobalLiquidityUpdated :> string)
+  @genType
+  type t = {
+    id: id,
+    newTotal: bigint,
+  }
+
+  let schema = S.object((s): t => {
+    id: s.field("id", S.string),
+    newTotal: s.field("newTotal", BigInt.schema),
+  })
+
+  let rowsSchema = S.array(schema)
+
+  @genType
+  type indexedFieldOperations = {
+    
+  }
+
+  let table = mkTable(
+    (name :> string),
+    ~fields=[
       mkField(
       "id", 
       Text,
@@ -1511,12 +1625,14 @@ let userEntities = [
   module(ChronoGridWrapper_BetPlacedWithSession),
   module(ChronoGridWrapper_Deposited),
   module(ChronoGridWrapper_EIP712DomainChanged),
+  module(ChronoGridWrapper_FinalBalance),
   module(ChronoGridWrapper_RelayerUpdated),
   module(ChronoGridWrapper_Withdrawn),
   module(ChronoGrid_AutoClaimFailed),
   module(ChronoGrid_AutoClaimSkipped),
   module(ChronoGrid_BetPlaced),
   module(ChronoGrid_GlobalLiquidityAdded),
+  module(ChronoGrid_GlobalLiquidityUpdated),
   module(ChronoGrid_GridCreated),
   module(ChronoGrid_MaxBetAmountUpdated),
   module(ChronoGrid_OwnershipTransferred),

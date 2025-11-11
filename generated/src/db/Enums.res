@@ -18,12 +18,14 @@ module EntityType = {
     | @as("ChronoGridWrapper_BetPlacedWithSession") ChronoGridWrapper_BetPlacedWithSession
     | @as("ChronoGridWrapper_Deposited") ChronoGridWrapper_Deposited
     | @as("ChronoGridWrapper_EIP712DomainChanged") ChronoGridWrapper_EIP712DomainChanged
+    | @as("ChronoGridWrapper_FinalBalance") ChronoGridWrapper_FinalBalance
     | @as("ChronoGridWrapper_RelayerUpdated") ChronoGridWrapper_RelayerUpdated
     | @as("ChronoGridWrapper_Withdrawn") ChronoGridWrapper_Withdrawn
     | @as("ChronoGrid_AutoClaimFailed") ChronoGrid_AutoClaimFailed
     | @as("ChronoGrid_AutoClaimSkipped") ChronoGrid_AutoClaimSkipped
     | @as("ChronoGrid_BetPlaced") ChronoGrid_BetPlaced
     | @as("ChronoGrid_GlobalLiquidityAdded") ChronoGrid_GlobalLiquidityAdded
+    | @as("ChronoGrid_GlobalLiquidityUpdated") ChronoGrid_GlobalLiquidityUpdated
     | @as("ChronoGrid_GridCreated") ChronoGrid_GridCreated
     | @as("ChronoGrid_MaxBetAmountUpdated") ChronoGrid_MaxBetAmountUpdated
     | @as("ChronoGrid_OwnershipTransferred") ChronoGrid_OwnershipTransferred
@@ -39,12 +41,14 @@ module EntityType = {
     ChronoGridWrapper_BetPlacedWithSession,
     ChronoGridWrapper_Deposited,
     ChronoGridWrapper_EIP712DomainChanged,
+    ChronoGridWrapper_FinalBalance,
     ChronoGridWrapper_RelayerUpdated,
     ChronoGridWrapper_Withdrawn,
     ChronoGrid_AutoClaimFailed,
     ChronoGrid_AutoClaimSkipped,
     ChronoGrid_BetPlaced,
     ChronoGrid_GlobalLiquidityAdded,
+    ChronoGrid_GlobalLiquidityUpdated,
     ChronoGrid_GridCreated,
     ChronoGrid_MaxBetAmountUpdated,
     ChronoGrid_OwnershipTransferred,

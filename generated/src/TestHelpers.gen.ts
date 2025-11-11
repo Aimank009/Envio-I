@@ -11,6 +11,8 @@ import type {ChronoGridWrapper_Deposited_event as Types_ChronoGridWrapper_Deposi
 
 import type {ChronoGridWrapper_EIP712DomainChanged_event as Types_ChronoGridWrapper_EIP712DomainChanged_event} from './Types.gen';
 
+import type {ChronoGridWrapper_FinalBalance_event as Types_ChronoGridWrapper_FinalBalance_event} from './Types.gen';
+
 import type {ChronoGridWrapper_RelayerUpdated_event as Types_ChronoGridWrapper_RelayerUpdated_event} from './Types.gen';
 
 import type {ChronoGridWrapper_Withdrawn_event as Types_ChronoGridWrapper_Withdrawn_event} from './Types.gen';
@@ -22,6 +24,8 @@ import type {ChronoGrid_AutoClaimSkipped_event as Types_ChronoGrid_AutoClaimSkip
 import type {ChronoGrid_BetPlaced_event as Types_ChronoGrid_BetPlaced_event} from './Types.gen';
 
 import type {ChronoGrid_GlobalLiquidityAdded_event as Types_ChronoGrid_GlobalLiquidityAdded_event} from './Types.gen';
+
+import type {ChronoGrid_GlobalLiquidityUpdated_event as Types_ChronoGrid_GlobalLiquidityUpdated_event} from './Types.gen';
 
 import type {ChronoGrid_GridCreated_event as Types_ChronoGrid_GridCreated_event} from './Types.gen';
 
@@ -91,6 +95,9 @@ export type ChronoGrid_BetPlaced_createMockArgs = {
   readonly sharesReceived?: bigint; 
   readonly pricePerShare?: bigint; 
   readonly bAtEntry?: bigint; 
+  readonly totalshare?: bigint; 
+  readonly price_min?: bigint; 
+  readonly price_max?: bigint; 
   readonly mockEventData?: EventFunctions_mockEventData
 };
 
@@ -99,6 +106,8 @@ export type ChronoGrid_GlobalLiquidityAdded_createMockArgs = {
   readonly newTotal?: bigint; 
   readonly mockEventData?: EventFunctions_mockEventData
 };
+
+export type ChronoGrid_GlobalLiquidityUpdated_createMockArgs = { readonly newTotal?: bigint; readonly mockEventData?: EventFunctions_mockEventData };
 
 export type ChronoGrid_GridCreated_createMockArgs = {
   readonly gridId?: string; 
@@ -185,6 +194,12 @@ export type ChronoGridWrapper_Deposited_createMockArgs = {
 
 export type ChronoGridWrapper_EIP712DomainChanged_createMockArgs = { readonly mockEventData?: EventFunctions_mockEventData };
 
+export type ChronoGridWrapper_FinalBalance_createMockArgs = {
+  readonly user?: Address_t; 
+  readonly newBalance?: bigint; 
+  readonly mockEventData?: EventFunctions_mockEventData
+};
+
 export type ChronoGridWrapper_RelayerUpdated_createMockArgs = {
   readonly oldRelayer?: Address_t; 
   readonly newRelayer?: Address_t; 
@@ -219,6 +234,10 @@ export const ChronoGrid_BetPlaced_createMockEvent: (args:ChronoGrid_BetPlaced_cr
 export const ChronoGrid_GlobalLiquidityAdded_processEvent: EventFunctions_eventProcessor<Types_ChronoGrid_GlobalLiquidityAdded_event> = TestHelpersJS.ChronoGrid.GlobalLiquidityAdded.processEvent as any;
 
 export const ChronoGrid_GlobalLiquidityAdded_createMockEvent: (args:ChronoGrid_GlobalLiquidityAdded_createMockArgs) => Types_ChronoGrid_GlobalLiquidityAdded_event = TestHelpersJS.ChronoGrid.GlobalLiquidityAdded.createMockEvent as any;
+
+export const ChronoGrid_GlobalLiquidityUpdated_processEvent: EventFunctions_eventProcessor<Types_ChronoGrid_GlobalLiquidityUpdated_event> = TestHelpersJS.ChronoGrid.GlobalLiquidityUpdated.processEvent as any;
+
+export const ChronoGrid_GlobalLiquidityUpdated_createMockEvent: (args:ChronoGrid_GlobalLiquidityUpdated_createMockArgs) => Types_ChronoGrid_GlobalLiquidityUpdated_event = TestHelpersJS.ChronoGrid.GlobalLiquidityUpdated.createMockEvent as any;
 
 export const ChronoGrid_GridCreated_processEvent: EventFunctions_eventProcessor<Types_ChronoGrid_GridCreated_event> = TestHelpersJS.ChronoGrid.GridCreated.processEvent as any;
 
@@ -263,6 +282,10 @@ export const ChronoGridWrapper_Deposited_createMockEvent: (args:ChronoGridWrappe
 export const ChronoGridWrapper_EIP712DomainChanged_processEvent: EventFunctions_eventProcessor<Types_ChronoGridWrapper_EIP712DomainChanged_event> = TestHelpersJS.ChronoGridWrapper.EIP712DomainChanged.processEvent as any;
 
 export const ChronoGridWrapper_EIP712DomainChanged_createMockEvent: (args:ChronoGridWrapper_EIP712DomainChanged_createMockArgs) => Types_ChronoGridWrapper_EIP712DomainChanged_event = TestHelpersJS.ChronoGridWrapper.EIP712DomainChanged.createMockEvent as any;
+
+export const ChronoGridWrapper_FinalBalance_processEvent: EventFunctions_eventProcessor<Types_ChronoGridWrapper_FinalBalance_event> = TestHelpersJS.ChronoGridWrapper.FinalBalance.processEvent as any;
+
+export const ChronoGridWrapper_FinalBalance_createMockEvent: (args:ChronoGridWrapper_FinalBalance_createMockArgs) => Types_ChronoGridWrapper_FinalBalance_event = TestHelpersJS.ChronoGridWrapper.FinalBalance.createMockEvent as any;
 
 export const ChronoGridWrapper_RelayerUpdated_processEvent: EventFunctions_eventProcessor<Types_ChronoGridWrapper_RelayerUpdated_event> = TestHelpersJS.ChronoGridWrapper.RelayerUpdated.processEvent as any;
 
@@ -320,6 +343,10 @@ export const ChronoGrid: {
   WrapperSet: {
     processEvent: EventFunctions_eventProcessor<Types_ChronoGrid_WrapperSet_event>; 
     createMockEvent: (args:ChronoGrid_WrapperSet_createMockArgs) => Types_ChronoGrid_WrapperSet_event
+  }; 
+  GlobalLiquidityUpdated: {
+    processEvent: EventFunctions_eventProcessor<Types_ChronoGrid_GlobalLiquidityUpdated_event>; 
+    createMockEvent: (args:ChronoGrid_GlobalLiquidityUpdated_createMockArgs) => Types_ChronoGrid_GlobalLiquidityUpdated_event
   }
 } = TestHelpersJS.ChronoGrid as any;
 
@@ -339,6 +366,10 @@ export const ChronoGridWrapper: {
   BetPlacedWithSession: {
     processEvent: EventFunctions_eventProcessor<Types_ChronoGridWrapper_BetPlacedWithSession_event>; 
     createMockEvent: (args:ChronoGridWrapper_BetPlacedWithSession_createMockArgs) => Types_ChronoGridWrapper_BetPlacedWithSession_event
+  }; 
+  FinalBalance: {
+    processEvent: EventFunctions_eventProcessor<Types_ChronoGridWrapper_FinalBalance_event>; 
+    createMockEvent: (args:ChronoGridWrapper_FinalBalance_createMockArgs) => Types_ChronoGridWrapper_FinalBalance_event
   }; 
   Deposited: {
     processEvent: EventFunctions_eventProcessor<Types_ChronoGridWrapper_Deposited_event>; 

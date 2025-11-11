@@ -253,6 +253,12 @@ module ChronoGrid = {
       pricePerShare?: bigint,
       @as("bAtEntry")
       bAtEntry?: bigint,
+      @as("totalshare")
+      totalshare?: bigint,
+      @as("price_min")
+      price_min?: bigint,
+      @as("price_max")
+      price_max?: bigint,
       mockEventData?: EventFunctions.mockEventData,
     }
 
@@ -266,6 +272,9 @@ module ChronoGrid = {
         ?sharesReceived,
         ?pricePerShare,
         ?bAtEntry,
+        ?totalshare,
+        ?price_min,
+        ?price_max,
         ?mockEventData,
       } = args
 
@@ -278,6 +287,9 @@ module ChronoGrid = {
        sharesReceived: sharesReceived->Belt.Option.getWithDefault(0n),
        pricePerShare: pricePerShare->Belt.Option.getWithDefault(0n),
        bAtEntry: bAtEntry->Belt.Option.getWithDefault(0n),
+       totalshare: totalshare->Belt.Option.getWithDefault(0n),
+       price_min: price_min->Belt.Option.getWithDefault(0n),
+       price_max: price_max->Belt.Option.getWithDefault(0n),
       }
 ->(Utils.magic: Types.ChronoGrid.BetPlaced.eventArgs => Internal.eventParams)
 
@@ -324,6 +336,40 @@ module ChronoGrid = {
         ~mockEventData,
         ~register=(Types.ChronoGrid.GlobalLiquidityAdded.register :> unit => Internal.eventConfig),
       )->(Utils.magic: Internal.event => Types.ChronoGrid.GlobalLiquidityAdded.event)
+    }
+  }
+
+  module GlobalLiquidityUpdated = {
+    @genType
+    let processEvent: EventFunctions.eventProcessor<Types.ChronoGrid.GlobalLiquidityUpdated.event> = EventFunctions.makeEventProcessor(
+      ~register=(Types.ChronoGrid.GlobalLiquidityUpdated.register :> unit => Internal.eventConfig),
+    )
+
+    @genType
+    type createMockArgs = {
+      @as("newTotal")
+      newTotal?: bigint,
+      mockEventData?: EventFunctions.mockEventData,
+    }
+
+    @genType
+    let createMockEvent = args => {
+      let {
+        ?newTotal,
+        ?mockEventData,
+      } = args
+
+      let params = 
+      {
+       newTotal: newTotal->Belt.Option.getWithDefault(0n),
+      }
+->(Utils.magic: Types.ChronoGrid.GlobalLiquidityUpdated.eventArgs => Internal.eventParams)
+
+      EventFunctions.makeEventMocker(
+        ~params,
+        ~mockEventData,
+        ~register=(Types.ChronoGrid.GlobalLiquidityUpdated.register :> unit => Internal.eventConfig),
+      )->(Utils.magic: Internal.event => Types.ChronoGrid.GlobalLiquidityUpdated.event)
     }
   }
 
@@ -829,6 +875,44 @@ module ChronoGridWrapper = {
         ~mockEventData,
         ~register=(Types.ChronoGridWrapper.EIP712DomainChanged.register :> unit => Internal.eventConfig),
       )->(Utils.magic: Internal.event => Types.ChronoGridWrapper.EIP712DomainChanged.event)
+    }
+  }
+
+  module FinalBalance = {
+    @genType
+    let processEvent: EventFunctions.eventProcessor<Types.ChronoGridWrapper.FinalBalance.event> = EventFunctions.makeEventProcessor(
+      ~register=(Types.ChronoGridWrapper.FinalBalance.register :> unit => Internal.eventConfig),
+    )
+
+    @genType
+    type createMockArgs = {
+      @as("user")
+      user?: Address.t,
+      @as("newBalance")
+      newBalance?: bigint,
+      mockEventData?: EventFunctions.mockEventData,
+    }
+
+    @genType
+    let createMockEvent = args => {
+      let {
+        ?user,
+        ?newBalance,
+        ?mockEventData,
+      } = args
+
+      let params = 
+      {
+       user: user->Belt.Option.getWithDefault(TestHelpers_MockAddresses.defaultAddress),
+       newBalance: newBalance->Belt.Option.getWithDefault(0n),
+      }
+->(Utils.magic: Types.ChronoGridWrapper.FinalBalance.eventArgs => Internal.eventParams)
+
+      EventFunctions.makeEventMocker(
+        ~params,
+        ~mockEventData,
+        ~register=(Types.ChronoGridWrapper.FinalBalance.register :> unit => Internal.eventConfig),
+      )->(Utils.magic: Internal.event => Types.ChronoGridWrapper.FinalBalance.event)
     }
   }
 

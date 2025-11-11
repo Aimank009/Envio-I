@@ -9,6 +9,8 @@ import type {ChronoGridWrapper_Deposited_t as Entities_ChronoGridWrapper_Deposit
 
 import type {ChronoGridWrapper_EIP712DomainChanged_t as Entities_ChronoGridWrapper_EIP712DomainChanged_t} from '../src/db/Entities.gen';
 
+import type {ChronoGridWrapper_FinalBalance_t as Entities_ChronoGridWrapper_FinalBalance_t} from '../src/db/Entities.gen';
+
 import type {ChronoGridWrapper_RelayerUpdated_t as Entities_ChronoGridWrapper_RelayerUpdated_t} from '../src/db/Entities.gen';
 
 import type {ChronoGridWrapper_Withdrawn_t as Entities_ChronoGridWrapper_Withdrawn_t} from '../src/db/Entities.gen';
@@ -20,6 +22,8 @@ import type {ChronoGrid_AutoClaimSkipped_t as Entities_ChronoGrid_AutoClaimSkipp
 import type {ChronoGrid_BetPlaced_t as Entities_ChronoGrid_BetPlaced_t} from '../src/db/Entities.gen';
 
 import type {ChronoGrid_GlobalLiquidityAdded_t as Entities_ChronoGrid_GlobalLiquidityAdded_t} from '../src/db/Entities.gen';
+
+import type {ChronoGrid_GlobalLiquidityUpdated_t as Entities_ChronoGrid_GlobalLiquidityUpdated_t} from '../src/db/Entities.gen';
 
 import type {ChronoGrid_GridCreated_t as Entities_ChronoGrid_GridCreated_t} from '../src/db/Entities.gen';
 
@@ -90,6 +94,9 @@ export type ChronoGridWrapper_Deposited = chronoGridWrapper_Deposited;
 export type chronoGridWrapper_EIP712DomainChanged = Entities_ChronoGridWrapper_EIP712DomainChanged_t;
 export type ChronoGridWrapper_EIP712DomainChanged = chronoGridWrapper_EIP712DomainChanged;
 
+export type chronoGridWrapper_FinalBalance = Entities_ChronoGridWrapper_FinalBalance_t;
+export type ChronoGridWrapper_FinalBalance = chronoGridWrapper_FinalBalance;
+
 export type chronoGridWrapper_RelayerUpdated = Entities_ChronoGridWrapper_RelayerUpdated_t;
 export type ChronoGridWrapper_RelayerUpdated = chronoGridWrapper_RelayerUpdated;
 
@@ -107,6 +114,9 @@ export type ChronoGrid_BetPlaced = chronoGrid_BetPlaced;
 
 export type chronoGrid_GlobalLiquidityAdded = Entities_ChronoGrid_GlobalLiquidityAdded_t;
 export type ChronoGrid_GlobalLiquidityAdded = chronoGrid_GlobalLiquidityAdded;
+
+export type chronoGrid_GlobalLiquidityUpdated = Entities_ChronoGrid_GlobalLiquidityUpdated_t;
+export type ChronoGrid_GlobalLiquidityUpdated = chronoGrid_GlobalLiquidityUpdated;
 
 export type chronoGrid_GridCreated = Entities_ChronoGrid_GridCreated_t;
 export type ChronoGrid_GridCreated = chronoGrid_GridCreated;
@@ -300,7 +310,10 @@ export type ChronoGrid_BetPlaced_eventArgs = {
   readonly amountPaid: bigint; 
   readonly sharesReceived: bigint; 
   readonly pricePerShare: bigint; 
-  readonly bAtEntry: bigint
+  readonly bAtEntry: bigint; 
+  readonly totalshare: bigint; 
+  readonly price_min: bigint; 
+  readonly price_max: bigint
 };
 
 export type ChronoGrid_BetPlaced_block = Block_t;
@@ -375,6 +388,37 @@ export type ChronoGrid_GlobalLiquidityAdded_contractRegister = Internal_genericC
 export type ChronoGrid_GlobalLiquidityAdded_eventFilter = {};
 
 export type ChronoGrid_GlobalLiquidityAdded_eventFilters = Internal_noEventFilters;
+
+export type ChronoGrid_GlobalLiquidityUpdated_eventArgs = { readonly newTotal: bigint };
+
+export type ChronoGrid_GlobalLiquidityUpdated_block = Block_t;
+
+export type ChronoGrid_GlobalLiquidityUpdated_transaction = Transaction_t;
+
+export type ChronoGrid_GlobalLiquidityUpdated_event = {
+  /** The parameters or arguments associated with this event. */
+  readonly params: ChronoGrid_GlobalLiquidityUpdated_eventArgs; 
+  /** The unique identifier of the blockchain network where this event occurred. */
+  readonly chainId: ChronoGrid_chainId; 
+  /** The address of the contract that emitted this event. */
+  readonly srcAddress: Address_t; 
+  /** The index of this event's log within the block. */
+  readonly logIndex: number; 
+  /** The transaction that triggered this event. Configurable in `config.yaml` via the `field_selection` option. */
+  readonly transaction: ChronoGrid_GlobalLiquidityUpdated_transaction; 
+  /** The block in which this event was recorded. Configurable in `config.yaml` via the `field_selection` option. */
+  readonly block: ChronoGrid_GlobalLiquidityUpdated_block
+};
+
+export type ChronoGrid_GlobalLiquidityUpdated_handlerArgs = Internal_genericHandlerArgs<ChronoGrid_GlobalLiquidityUpdated_event,handlerContext,void>;
+
+export type ChronoGrid_GlobalLiquidityUpdated_handler = Internal_genericHandler<ChronoGrid_GlobalLiquidityUpdated_handlerArgs>;
+
+export type ChronoGrid_GlobalLiquidityUpdated_contractRegister = Internal_genericContractRegister<Internal_genericContractRegisterArgs<ChronoGrid_GlobalLiquidityUpdated_event,contractRegistrations>>;
+
+export type ChronoGrid_GlobalLiquidityUpdated_eventFilter = {};
+
+export type ChronoGrid_GlobalLiquidityUpdated_eventFilters = Internal_noEventFilters;
 
 export type ChronoGrid_GridCreated_eventArgs = {
   readonly gridId: string; 
@@ -879,6 +923,50 @@ export type ChronoGridWrapper_EIP712DomainChanged_contractRegister = Internal_ge
 export type ChronoGridWrapper_EIP712DomainChanged_eventFilter = {};
 
 export type ChronoGridWrapper_EIP712DomainChanged_eventFilters = Internal_noEventFilters;
+
+export type ChronoGridWrapper_FinalBalance_eventArgs = { readonly user: Address_t; readonly newBalance: bigint };
+
+export type ChronoGridWrapper_FinalBalance_block = Block_t;
+
+export type ChronoGridWrapper_FinalBalance_transaction = Transaction_t;
+
+export type ChronoGridWrapper_FinalBalance_event = {
+  /** The parameters or arguments associated with this event. */
+  readonly params: ChronoGridWrapper_FinalBalance_eventArgs; 
+  /** The unique identifier of the blockchain network where this event occurred. */
+  readonly chainId: ChronoGridWrapper_chainId; 
+  /** The address of the contract that emitted this event. */
+  readonly srcAddress: Address_t; 
+  /** The index of this event's log within the block. */
+  readonly logIndex: number; 
+  /** The transaction that triggered this event. Configurable in `config.yaml` via the `field_selection` option. */
+  readonly transaction: ChronoGridWrapper_FinalBalance_transaction; 
+  /** The block in which this event was recorded. Configurable in `config.yaml` via the `field_selection` option. */
+  readonly block: ChronoGridWrapper_FinalBalance_block
+};
+
+export type ChronoGridWrapper_FinalBalance_handlerArgs = Internal_genericHandlerArgs<ChronoGridWrapper_FinalBalance_event,handlerContext,void>;
+
+export type ChronoGridWrapper_FinalBalance_handler = Internal_genericHandler<ChronoGridWrapper_FinalBalance_handlerArgs>;
+
+export type ChronoGridWrapper_FinalBalance_contractRegister = Internal_genericContractRegister<Internal_genericContractRegisterArgs<ChronoGridWrapper_FinalBalance_event,contractRegistrations>>;
+
+export type ChronoGridWrapper_FinalBalance_eventFilter = { readonly user?: SingleOrMultiple_t<Address_t> };
+
+export type ChronoGridWrapper_FinalBalance_eventFiltersArgs = { 
+/** The unique identifier of the blockchain network where this event occurred. */
+readonly chainId: ChronoGridWrapper_chainId; 
+/** Addresses of the contracts indexing the event. */
+readonly addresses: Address_t[] };
+
+export type ChronoGridWrapper_FinalBalance_eventFiltersDefinition = 
+    ChronoGridWrapper_FinalBalance_eventFilter
+  | ChronoGridWrapper_FinalBalance_eventFilter[];
+
+export type ChronoGridWrapper_FinalBalance_eventFilters = 
+    ChronoGridWrapper_FinalBalance_eventFilter
+  | ChronoGridWrapper_FinalBalance_eventFilter[]
+  | ((_1:ChronoGridWrapper_FinalBalance_eventFiltersArgs) => ChronoGridWrapper_FinalBalance_eventFiltersDefinition);
 
 export type ChronoGridWrapper_RelayerUpdated_eventArgs = { readonly oldRelayer: Address_t; readonly newRelayer: Address_t };
 

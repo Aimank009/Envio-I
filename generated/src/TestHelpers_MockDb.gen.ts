@@ -11,6 +11,8 @@ import type {ChronoGridWrapper_Deposited_t as Entities_ChronoGridWrapper_Deposit
 
 import type {ChronoGridWrapper_EIP712DomainChanged_t as Entities_ChronoGridWrapper_EIP712DomainChanged_t} from '../src/db/Entities.gen';
 
+import type {ChronoGridWrapper_FinalBalance_t as Entities_ChronoGridWrapper_FinalBalance_t} from '../src/db/Entities.gen';
+
 import type {ChronoGridWrapper_RelayerUpdated_t as Entities_ChronoGridWrapper_RelayerUpdated_t} from '../src/db/Entities.gen';
 
 import type {ChronoGridWrapper_Withdrawn_t as Entities_ChronoGridWrapper_Withdrawn_t} from '../src/db/Entities.gen';
@@ -22,6 +24,8 @@ import type {ChronoGrid_AutoClaimSkipped_t as Entities_ChronoGrid_AutoClaimSkipp
 import type {ChronoGrid_BetPlaced_t as Entities_ChronoGrid_BetPlaced_t} from '../src/db/Entities.gen';
 
 import type {ChronoGrid_GlobalLiquidityAdded_t as Entities_ChronoGrid_GlobalLiquidityAdded_t} from '../src/db/Entities.gen';
+
+import type {ChronoGrid_GlobalLiquidityUpdated_t as Entities_ChronoGrid_GlobalLiquidityUpdated_t} from '../src/db/Entities.gen';
 
 import type {ChronoGrid_GridCreated_t as Entities_ChronoGrid_GridCreated_t} from '../src/db/Entities.gen';
 
@@ -64,12 +68,14 @@ export type entities = {
   readonly ChronoGridWrapper_BetPlacedWithSession: entityStoreOperations<Entities_ChronoGridWrapper_BetPlacedWithSession_t>; 
   readonly ChronoGridWrapper_Deposited: entityStoreOperations<Entities_ChronoGridWrapper_Deposited_t>; 
   readonly ChronoGridWrapper_EIP712DomainChanged: entityStoreOperations<Entities_ChronoGridWrapper_EIP712DomainChanged_t>; 
+  readonly ChronoGridWrapper_FinalBalance: entityStoreOperations<Entities_ChronoGridWrapper_FinalBalance_t>; 
   readonly ChronoGridWrapper_RelayerUpdated: entityStoreOperations<Entities_ChronoGridWrapper_RelayerUpdated_t>; 
   readonly ChronoGridWrapper_Withdrawn: entityStoreOperations<Entities_ChronoGridWrapper_Withdrawn_t>; 
   readonly ChronoGrid_AutoClaimFailed: entityStoreOperations<Entities_ChronoGrid_AutoClaimFailed_t>; 
   readonly ChronoGrid_AutoClaimSkipped: entityStoreOperations<Entities_ChronoGrid_AutoClaimSkipped_t>; 
   readonly ChronoGrid_BetPlaced: entityStoreOperations<Entities_ChronoGrid_BetPlaced_t>; 
   readonly ChronoGrid_GlobalLiquidityAdded: entityStoreOperations<Entities_ChronoGrid_GlobalLiquidityAdded_t>; 
+  readonly ChronoGrid_GlobalLiquidityUpdated: entityStoreOperations<Entities_ChronoGrid_GlobalLiquidityUpdated_t>; 
   readonly ChronoGrid_GridCreated: entityStoreOperations<Entities_ChronoGrid_GridCreated_t>; 
   readonly ChronoGrid_MaxBetAmountUpdated: entityStoreOperations<Entities_ChronoGrid_MaxBetAmountUpdated_t>; 
   readonly ChronoGrid_OwnershipTransferred: entityStoreOperations<Entities_ChronoGrid_OwnershipTransferred_t>; 

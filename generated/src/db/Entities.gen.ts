@@ -36,6 +36,14 @@ export type ChronoGridWrapper_EIP712DomainChanged_t = { readonly id: id };
 
 export type ChronoGridWrapper_EIP712DomainChanged_indexedFieldOperations = {};
 
+export type ChronoGridWrapper_FinalBalance_t = {
+  readonly id: id; 
+  readonly newBalance: bigint; 
+  readonly user: string
+};
+
+export type ChronoGridWrapper_FinalBalance_indexedFieldOperations = {};
+
 export type ChronoGridWrapper_RelayerUpdated_t = {
   readonly id: id; 
   readonly newRelayer: string; 
@@ -95,6 +103,10 @@ export type ChronoGrid_GlobalLiquidityAdded_t = {
 };
 
 export type ChronoGrid_GlobalLiquidityAdded_indexedFieldOperations = {};
+
+export type ChronoGrid_GlobalLiquidityUpdated_t = { readonly id: id; readonly newTotal: bigint };
+
+export type ChronoGrid_GlobalLiquidityUpdated_indexedFieldOperations = {};
 
 export type ChronoGrid_GridCreated_t = {
   readonly gridId: string; 

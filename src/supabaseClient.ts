@@ -181,6 +181,37 @@ export async function insertGlobalLiquidityAdded(data: {
   }
 }
 
+// 4b. GlobalLiquidityUpdated
+export async function insertGlobalLiquidityUpdated(data: {
+  id: string;
+  newTotal: string;
+  blockNumber?: number;
+  timestamp?: string;
+}) {
+  try {
+    const { data: result, error } = await supabase
+      .from('global_liquidity_updated')
+      .insert([{
+        event_id: data.id,
+        new_total: data.newTotal,
+        block_number: data.blockNumber,
+        timestamp: data.timestamp,
+        created_at: new Date().toISOString(),
+      }]);
+
+    if (error) {
+      console.error('❌ Supabase insert error (GlobalLiquidityUpdated):', error);
+      return { success: false, error };
+    }
+
+    console.log('✅ GlobalLiquidityUpdated sent to Supabase');
+    return { success: true, data: result };
+  } catch (error: any) {
+    console.error('❌ Supabase error (GlobalLiquidityUpdated):', error.message);
+    return { success: false, error };
+  }
+}
+
 // 5. GridCreated
 export async function insertGridCreated(data: {
   id: string;
@@ -586,6 +617,39 @@ export async function insertEIP712DomainChanged(data: {
     return { success: true, data: result };
   } catch (error: any) {
     console.error('❌ Supabase error (EIP712DomainChanged):', error.message);
+    return { success: false, error };
+  }
+}
+
+// 15b. FinalBalance
+export async function insertFinalBalance(data: {
+  id: string;
+  user: string;
+  newBalance: string;
+  blockNumber?: number;
+  timestamp?: string;
+}) {
+  try {
+    const { data: result, error } = await supabase
+      .from('final_balance')
+      .insert([{
+        event_id: data.id,
+        user_address: data.user,
+        new_balance: data.newBalance,
+        block_number: data.blockNumber,
+        timestamp: data.timestamp,
+        created_at: new Date().toISOString(),
+      }]);
+
+    if (error) {
+      console.error('❌ Supabase insert error (FinalBalance):', error);
+      return { success: false, error };
+    }
+
+    console.log('✅ FinalBalance sent to Supabase');
+    return { success: true, data: result };
+  } catch (error: any) {
+    console.error('❌ Supabase error (FinalBalance):', error.message);
     return { success: false, error };
   }
 }

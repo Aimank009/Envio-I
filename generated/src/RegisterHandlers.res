@@ -39,6 +39,7 @@ let registerContractHandlers = (
               (Types.ChronoGrid.AutoClaimSkipped.register() :> Internal.eventConfig),
               (Types.ChronoGrid.BetPlaced.register() :> Internal.eventConfig),
               (Types.ChronoGrid.GlobalLiquidityAdded.register() :> Internal.eventConfig),
+              (Types.ChronoGrid.GlobalLiquidityUpdated.register() :> Internal.eventConfig),
               (Types.ChronoGrid.GridCreated.register() :> Internal.eventConfig),
               (Types.ChronoGrid.MaxBetAmountUpdated.register() :> Internal.eventConfig),
               (Types.ChronoGrid.OwnershipTransferred.register() :> Internal.eventConfig),
@@ -61,6 +62,7 @@ let registerContractHandlers = (
               (Types.ChronoGridWrapper.BetPlacedWithSession.register() :> Internal.eventConfig),
               (Types.ChronoGridWrapper.Deposited.register() :> Internal.eventConfig),
               (Types.ChronoGridWrapper.EIP712DomainChanged.register() :> Internal.eventConfig),
+              (Types.ChronoGridWrapper.FinalBalance.register() :> Internal.eventConfig),
               (Types.ChronoGridWrapper.RelayerUpdated.register() :> Internal.eventConfig),
               (Types.ChronoGridWrapper.Withdrawn.register() :> Internal.eventConfig),
             ],
@@ -73,7 +75,7 @@ let registerContractHandlers = (
           startBlock: 0,
           id: 999,
           contracts,
-          sources: NetworkSources.evm(~chain, ~contracts=[{name: "ChronoGrid",events: [Types.ChronoGrid.AutoClaimFailed.register(), Types.ChronoGrid.AutoClaimSkipped.register(), Types.ChronoGrid.BetPlaced.register(), Types.ChronoGrid.GlobalLiquidityAdded.register(), Types.ChronoGrid.GridCreated.register(), Types.ChronoGrid.MaxBetAmountUpdated.register(), Types.ChronoGrid.OwnershipTransferred.register(), Types.ChronoGrid.TimeperiodCreated.register(), Types.ChronoGrid.TimeperiodFinalized.register(), Types.ChronoGrid.TimeperiodSettled.register(), Types.ChronoGrid.WinningsClaimedEqual.register(), Types.ChronoGrid.WrapperSet.register()],abi: Types.ChronoGrid.abi}, {name: "ChronoGridWrapper",events: [Types.ChronoGridWrapper.BetPlacedWithSession.register(), Types.ChronoGridWrapper.Deposited.register(), Types.ChronoGridWrapper.EIP712DomainChanged.register(), Types.ChronoGridWrapper.RelayerUpdated.register(), Types.ChronoGridWrapper.Withdrawn.register()],abi: Types.ChronoGridWrapper.abi}], ~hyperSync=Some("https://999.hypersync.xyz"), ~allEventSignatures=[Types.ChronoGrid.eventSignatures, Types.ChronoGridWrapper.eventSignatures]->Belt.Array.concatMany, ~shouldUseHypersyncClientDecoder=true, ~rpcs=[], ~lowercaseAddresses=false)
+          sources: NetworkSources.evm(~chain, ~contracts=[{name: "ChronoGrid",events: [Types.ChronoGrid.AutoClaimFailed.register(), Types.ChronoGrid.AutoClaimSkipped.register(), Types.ChronoGrid.BetPlaced.register(), Types.ChronoGrid.GlobalLiquidityAdded.register(), Types.ChronoGrid.GlobalLiquidityUpdated.register(), Types.ChronoGrid.GridCreated.register(), Types.ChronoGrid.MaxBetAmountUpdated.register(), Types.ChronoGrid.OwnershipTransferred.register(), Types.ChronoGrid.TimeperiodCreated.register(), Types.ChronoGrid.TimeperiodFinalized.register(), Types.ChronoGrid.TimeperiodSettled.register(), Types.ChronoGrid.WinningsClaimedEqual.register(), Types.ChronoGrid.WrapperSet.register()],abi: Types.ChronoGrid.abi}, {name: "ChronoGridWrapper",events: [Types.ChronoGridWrapper.BetPlacedWithSession.register(), Types.ChronoGridWrapper.Deposited.register(), Types.ChronoGridWrapper.EIP712DomainChanged.register(), Types.ChronoGridWrapper.FinalBalance.register(), Types.ChronoGridWrapper.RelayerUpdated.register(), Types.ChronoGridWrapper.Withdrawn.register()],abi: Types.ChronoGridWrapper.abi}], ~hyperSync=Some("https://999.hypersync.xyz"), ~allEventSignatures=[Types.ChronoGrid.eventSignatures, Types.ChronoGridWrapper.eventSignatures]->Belt.Array.concatMany, ~shouldUseHypersyncClientDecoder=true, ~rpcs=[], ~lowercaseAddresses=false)
         }
       },
     ]

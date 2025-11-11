@@ -72,12 +72,14 @@ and entities = {
     @as("ChronoGridWrapper_BetPlacedWithSession") chronoGridWrapper_BetPlacedWithSession: entityStoreOperations<Entities.ChronoGridWrapper_BetPlacedWithSession.t>,
     @as("ChronoGridWrapper_Deposited") chronoGridWrapper_Deposited: entityStoreOperations<Entities.ChronoGridWrapper_Deposited.t>,
     @as("ChronoGridWrapper_EIP712DomainChanged") chronoGridWrapper_EIP712DomainChanged: entityStoreOperations<Entities.ChronoGridWrapper_EIP712DomainChanged.t>,
+    @as("ChronoGridWrapper_FinalBalance") chronoGridWrapper_FinalBalance: entityStoreOperations<Entities.ChronoGridWrapper_FinalBalance.t>,
     @as("ChronoGridWrapper_RelayerUpdated") chronoGridWrapper_RelayerUpdated: entityStoreOperations<Entities.ChronoGridWrapper_RelayerUpdated.t>,
     @as("ChronoGridWrapper_Withdrawn") chronoGridWrapper_Withdrawn: entityStoreOperations<Entities.ChronoGridWrapper_Withdrawn.t>,
     @as("ChronoGrid_AutoClaimFailed") chronoGrid_AutoClaimFailed: entityStoreOperations<Entities.ChronoGrid_AutoClaimFailed.t>,
     @as("ChronoGrid_AutoClaimSkipped") chronoGrid_AutoClaimSkipped: entityStoreOperations<Entities.ChronoGrid_AutoClaimSkipped.t>,
     @as("ChronoGrid_BetPlaced") chronoGrid_BetPlaced: entityStoreOperations<Entities.ChronoGrid_BetPlaced.t>,
     @as("ChronoGrid_GlobalLiquidityAdded") chronoGrid_GlobalLiquidityAdded: entityStoreOperations<Entities.ChronoGrid_GlobalLiquidityAdded.t>,
+    @as("ChronoGrid_GlobalLiquidityUpdated") chronoGrid_GlobalLiquidityUpdated: entityStoreOperations<Entities.ChronoGrid_GlobalLiquidityUpdated.t>,
     @as("ChronoGrid_GridCreated") chronoGrid_GridCreated: entityStoreOperations<Entities.ChronoGrid_GridCreated.t>,
     @as("ChronoGrid_MaxBetAmountUpdated") chronoGrid_MaxBetAmountUpdated: entityStoreOperations<Entities.ChronoGrid_MaxBetAmountUpdated.t>,
     @as("ChronoGrid_OwnershipTransferred") chronoGrid_OwnershipTransferred: entityStoreOperations<Entities.ChronoGrid_OwnershipTransferred.t>,
@@ -340,6 +342,20 @@ let rec makeWithInMemoryStore: InMemoryStore.t => t = (inMemoryStore: InMemorySt
           ~getKey=({id}) => id,
         )
       },
+      chronoGridWrapper_FinalBalance: {
+        makeStoreOperatorEntity(
+          ~inMemoryStore,
+          ~makeMockDb=makeWithInMemoryStore,
+          ~getStore=db => db->InMemoryStore.getInMemTable(
+            ~entityConfig=module(Entities.ChronoGridWrapper_FinalBalance)->Entities.entityModToInternal,
+          )->(
+            Utils.magic: InMemoryTable.Entity.t<Internal.entity> => InMemoryTable.Entity.t<
+              Entities.ChronoGridWrapper_FinalBalance.t,
+            >
+          ),
+          ~getKey=({id}) => id,
+        )
+      },
       chronoGridWrapper_RelayerUpdated: {
         makeStoreOperatorEntity(
           ~inMemoryStore,
@@ -419,6 +435,20 @@ let rec makeWithInMemoryStore: InMemoryStore.t => t = (inMemoryStore: InMemorySt
           )->(
             Utils.magic: InMemoryTable.Entity.t<Internal.entity> => InMemoryTable.Entity.t<
               Entities.ChronoGrid_GlobalLiquidityAdded.t,
+            >
+          ),
+          ~getKey=({id}) => id,
+        )
+      },
+      chronoGrid_GlobalLiquidityUpdated: {
+        makeStoreOperatorEntity(
+          ~inMemoryStore,
+          ~makeMockDb=makeWithInMemoryStore,
+          ~getStore=db => db->InMemoryStore.getInMemTable(
+            ~entityConfig=module(Entities.ChronoGrid_GlobalLiquidityUpdated)->Entities.entityModToInternal,
+          )->(
+            Utils.magic: InMemoryTable.Entity.t<Internal.entity> => InMemoryTable.Entity.t<
+              Entities.ChronoGrid_GlobalLiquidityUpdated.t,
             >
           ),
           ~getKey=({id}) => id,

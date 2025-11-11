@@ -17,6 +17,10 @@ import type {ChronoGridWrapper_EIP712DomainChanged_eventFilters as Types_ChronoG
 
 import type {ChronoGridWrapper_EIP712DomainChanged_event as Types_ChronoGridWrapper_EIP712DomainChanged_event} from './Types.gen';
 
+import type {ChronoGridWrapper_FinalBalance_eventFilters as Types_ChronoGridWrapper_FinalBalance_eventFilters} from './Types.gen';
+
+import type {ChronoGridWrapper_FinalBalance_event as Types_ChronoGridWrapper_FinalBalance_event} from './Types.gen';
+
 import type {ChronoGridWrapper_RelayerUpdated_eventFilters as Types_ChronoGridWrapper_RelayerUpdated_eventFilters} from './Types.gen';
 
 import type {ChronoGridWrapper_RelayerUpdated_event as Types_ChronoGridWrapper_RelayerUpdated_event} from './Types.gen';
@@ -40,6 +44,10 @@ import type {ChronoGrid_BetPlaced_event as Types_ChronoGrid_BetPlaced_event} fro
 import type {ChronoGrid_GlobalLiquidityAdded_eventFilters as Types_ChronoGrid_GlobalLiquidityAdded_eventFilters} from './Types.gen';
 
 import type {ChronoGrid_GlobalLiquidityAdded_event as Types_ChronoGrid_GlobalLiquidityAdded_event} from './Types.gen';
+
+import type {ChronoGrid_GlobalLiquidityUpdated_eventFilters as Types_ChronoGrid_GlobalLiquidityUpdated_eventFilters} from './Types.gen';
+
+import type {ChronoGrid_GlobalLiquidityUpdated_event as Types_ChronoGrid_GlobalLiquidityUpdated_event} from './Types.gen';
 
 import type {ChronoGrid_GridCreated_eventFilters as Types_ChronoGrid_GridCreated_eventFilters} from './Types.gen';
 
@@ -111,6 +119,10 @@ export const ChronoGrid_GlobalLiquidityAdded_contractRegister: Types_fnWithEvent
 
 export const ChronoGrid_GlobalLiquidityAdded_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_GlobalLiquidityAdded_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GlobalLiquidityAdded_eventFilters>> = HandlersJS.ChronoGrid.GlobalLiquidityAdded.handler as any;
 
+export const ChronoGrid_GlobalLiquidityUpdated_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_GlobalLiquidityUpdated_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GlobalLiquidityUpdated_eventFilters>> = HandlersJS.ChronoGrid.GlobalLiquidityUpdated.contractRegister as any;
+
+export const ChronoGrid_GlobalLiquidityUpdated_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_GlobalLiquidityUpdated_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GlobalLiquidityUpdated_eventFilters>> = HandlersJS.ChronoGrid.GlobalLiquidityUpdated.handler as any;
+
 export const ChronoGrid_GridCreated_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_GridCreated_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GridCreated_eventFilters>> = HandlersJS.ChronoGrid.GridCreated.contractRegister as any;
 
 export const ChronoGrid_GridCreated_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_GridCreated_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GridCreated_eventFilters>> = HandlersJS.ChronoGrid.GridCreated.handler as any;
@@ -154,6 +166,10 @@ export const ChronoGridWrapper_Deposited_handler: Types_fnWithEventConfig<Intern
 export const ChronoGridWrapper_EIP712DomainChanged_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_EIP712DomainChanged_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_EIP712DomainChanged_eventFilters>> = HandlersJS.ChronoGridWrapper.EIP712DomainChanged.contractRegister as any;
 
 export const ChronoGridWrapper_EIP712DomainChanged_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_EIP712DomainChanged_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_EIP712DomainChanged_eventFilters>> = HandlersJS.ChronoGridWrapper.EIP712DomainChanged.handler as any;
+
+export const ChronoGridWrapper_FinalBalance_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_FinalBalance_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_FinalBalance_eventFilters>> = HandlersJS.ChronoGridWrapper.FinalBalance.contractRegister as any;
+
+export const ChronoGridWrapper_FinalBalance_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_FinalBalance_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_FinalBalance_eventFilters>> = HandlersJS.ChronoGridWrapper.FinalBalance.handler as any;
 
 export const ChronoGridWrapper_RelayerUpdated_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_RelayerUpdated_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_RelayerUpdated_eventFilters>> = HandlersJS.ChronoGridWrapper.RelayerUpdated.contractRegister as any;
 
@@ -214,6 +230,10 @@ export const ChronoGrid: {
   WrapperSet: {
     handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_WrapperSet_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_WrapperSet_eventFilters>>; 
     contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_WrapperSet_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_WrapperSet_eventFilters>>
+  }; 
+  GlobalLiquidityUpdated: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_GlobalLiquidityUpdated_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GlobalLiquidityUpdated_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_GlobalLiquidityUpdated_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GlobalLiquidityUpdated_eventFilters>>
   }
 } = HandlersJS.ChronoGrid as any;
 
@@ -229,6 +249,10 @@ export const ChronoGridWrapper: {
   BetPlacedWithSession: {
     handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_BetPlacedWithSession_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_BetPlacedWithSession_eventFilters>>; 
     contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_BetPlacedWithSession_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_BetPlacedWithSession_eventFilters>>
+  }; 
+  FinalBalance: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_FinalBalance_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_FinalBalance_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_FinalBalance_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_FinalBalance_eventFilters>>
   }; 
   Deposited: {
     handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_Deposited_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_Deposited_eventFilters>>; 

@@ -7,6 +7,7 @@ import {
   ChronoGrid_AutoClaimSkipped,
   ChronoGrid_BetPlaced,
   ChronoGrid_GlobalLiquidityAdded,
+  ChronoGrid_GlobalLiquidityUpdated,
   ChronoGrid_GridCreated,
   ChronoGrid_MaxBetAmountUpdated,
   ChronoGrid_OwnershipTransferred,
@@ -19,6 +20,7 @@ import {
   ChronoGridWrapper_BetPlacedWithSession,
   ChronoGridWrapper_Deposited,
   ChronoGridWrapper_EIP712DomainChanged,
+  ChronoGridWrapper_FinalBalance,
   ChronoGridWrapper_RelayerUpdated,
   ChronoGridWrapper_Withdrawn,
 } from "../generated";
@@ -30,6 +32,7 @@ import {
   insertAutoClaimSkipped,
   insertBetPlaced,
   insertGlobalLiquidityAdded,
+  insertGlobalLiquidityUpdated,
   insertGridCreated,
   insertMaxBetAmountUpdated,
   insertOwnershipTransferred,
@@ -41,6 +44,7 @@ import {
   insertBetPlacedWithSession,
   insertDeposited,
   insertEIP712DomainChanged,
+  insertFinalBalance,
   insertRelayerUpdated,
   insertWithdrawn,
 } from "./supabaseClient";
@@ -179,6 +183,29 @@ ChronoGrid.GlobalLiquidityAdded.handler(async ({ event, context }) => {
     blockNumber: event.block.number,
     timestamp: new Date(event.block.timestamp * 1000).toISOString(),
   }).catch(err => console.error('Supabase insert error (GlobalLiquidityAdded):', err.message));
+});
+
+ChronoGrid.GlobalLiquidityUpdated.handler(async ({ event, context }) => {
+  const entity: any = {
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    newTotal: event.params.newTotal,
+  };
+
+  
+  console.log('💧 GlobalLiquidityUpdated:', {
+    id: entity.id,
+    newTotal: entity.newTotal.toString(),
+  });
+
+  context.ChronoGrid_GlobalLiquidityUpdated.set(entity);
+
+  // 🚀 Send to Supabase (non-blocking)
+  insertGlobalLiquidityUpdated({
+    id: entity.id,
+    newTotal: entity.newTotal.toString(),
+    blockNumber: event.block.number,
+    timestamp: new Date(event.block.timestamp * 1000).toISOString(),
+  }).catch(err => console.error('Supabase insert error (GlobalLiquidityUpdated):', err.message));
 });
 
 ChronoGrid.GridCreated.handler(async ({ event, context }) => {
@@ -519,6 +546,31 @@ ChronoGridWrapper.EIP712DomainChanged.handler(async ({ event, context }) => {
     blockNumber: event.block.number,
     timestamp: new Date(event.block.timestamp * 1000).toISOString(),
   }).catch(err => console.error('Supabase insert error (EIP712DomainChanged):', err.message));
+});
+
+ChronoGridWrapper.FinalBalance.handler(async ({ event, context }) => {
+  const entity: any = {
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    user: event.params.user,
+    newBalance: event.params.newBalance,
+  };
+
+  console.log('💰 FinalBalance:', {
+    id: entity.id,
+    user: entity.user,
+    newBalance: entity.newBalance.toString(),
+  });
+
+  context.ChronoGridWrapper_FinalBalance.set(entity);
+
+  // 🚀 Send to Supabase (non-blocking)
+  insertFinalBalance({
+    id: entity.id,
+    user: entity.user,
+    newBalance: entity.newBalance.toString(),
+    blockNumber: event.block.number,
+    timestamp: new Date(event.block.timestamp * 1000).toISOString(),
+  }).catch(err => console.error('Supabase insert error (FinalBalance):', err.message));
 });
 
 ChronoGridWrapper.RelayerUpdated.handler(async ({ event, context }) => {

@@ -4,6 +4,7 @@ module ChronoGrid = {
   module AutoClaimSkipped = Types.MakeRegister(Types.ChronoGrid.AutoClaimSkipped)
   module BetPlaced = Types.MakeRegister(Types.ChronoGrid.BetPlaced)
   module GlobalLiquidityAdded = Types.MakeRegister(Types.ChronoGrid.GlobalLiquidityAdded)
+  module GlobalLiquidityUpdated = Types.MakeRegister(Types.ChronoGrid.GlobalLiquidityUpdated)
   module GridCreated = Types.MakeRegister(Types.ChronoGrid.GridCreated)
   module MaxBetAmountUpdated = Types.MakeRegister(Types.ChronoGrid.MaxBetAmountUpdated)
   module OwnershipTransferred = Types.MakeRegister(Types.ChronoGrid.OwnershipTransferred)
@@ -19,6 +20,7 @@ module ChronoGridWrapper = {
   module BetPlacedWithSession = Types.MakeRegister(Types.ChronoGridWrapper.BetPlacedWithSession)
   module Deposited = Types.MakeRegister(Types.ChronoGridWrapper.Deposited)
   module EIP712DomainChanged = Types.MakeRegister(Types.ChronoGridWrapper.EIP712DomainChanged)
+  module FinalBalance = Types.MakeRegister(Types.ChronoGridWrapper.FinalBalance)
   module RelayerUpdated = Types.MakeRegister(Types.ChronoGridWrapper.RelayerUpdated)
   module Withdrawn = Types.MakeRegister(Types.ChronoGridWrapper.Withdrawn)
 }

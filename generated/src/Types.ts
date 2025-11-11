@@ -108,6 +108,34 @@ export type HandlerContext = {
      */
     readonly deleteUnsafe: (id: string) => void,
   }
+  readonly ChronoGridWrapper_FinalBalance: {
+    /**
+     * Load the entity ChronoGridWrapper_FinalBalance from the storage by ID.
+     * If the entity is not found, returns undefined.
+     */
+    readonly get: (id: string) => Promise<Entities.ChronoGridWrapper_FinalBalance_t | undefined>,
+    /**
+     * Load the entity ChronoGridWrapper_FinalBalance from the storage by ID.
+     * If the entity is not found, throws an error.
+     */
+    readonly getOrThrow: (id: string, message?: string) => Promise<Entities.ChronoGridWrapper_FinalBalance_t>,
+    readonly getWhere: Entities.ChronoGridWrapper_FinalBalance_indexedFieldOperations,
+    /**
+     * Returns the entity ChronoGridWrapper_FinalBalance from the storage by ID.
+     * If the entity is not found, creates it using provided parameters and returns it.
+     */
+    readonly getOrCreate: (entity: Entities.ChronoGridWrapper_FinalBalance_t) => Promise<Entities.ChronoGridWrapper_FinalBalance_t>,
+    /**
+     * Set the entity ChronoGridWrapper_FinalBalance in the storage.
+     */
+    readonly set: (entity: Entities.ChronoGridWrapper_FinalBalance_t) => void,
+    /**
+     * Delete the entity ChronoGridWrapper_FinalBalance from the storage.
+     *
+     * The 'deleteUnsafe' method is experimental and unsafe. You should manually handle all entity references after deletion to maintain database consistency.
+     */
+    readonly deleteUnsafe: (id: string) => void,
+  }
   readonly ChronoGridWrapper_RelayerUpdated: {
     /**
      * Load the entity ChronoGridWrapper_RelayerUpdated from the storage by ID.
@@ -271,6 +299,34 @@ export type HandlerContext = {
     readonly set: (entity: Entities.ChronoGrid_GlobalLiquidityAdded_t) => void,
     /**
      * Delete the entity ChronoGrid_GlobalLiquidityAdded from the storage.
+     *
+     * The 'deleteUnsafe' method is experimental and unsafe. You should manually handle all entity references after deletion to maintain database consistency.
+     */
+    readonly deleteUnsafe: (id: string) => void,
+  }
+  readonly ChronoGrid_GlobalLiquidityUpdated: {
+    /**
+     * Load the entity ChronoGrid_GlobalLiquidityUpdated from the storage by ID.
+     * If the entity is not found, returns undefined.
+     */
+    readonly get: (id: string) => Promise<Entities.ChronoGrid_GlobalLiquidityUpdated_t | undefined>,
+    /**
+     * Load the entity ChronoGrid_GlobalLiquidityUpdated from the storage by ID.
+     * If the entity is not found, throws an error.
+     */
+    readonly getOrThrow: (id: string, message?: string) => Promise<Entities.ChronoGrid_GlobalLiquidityUpdated_t>,
+    readonly getWhere: Entities.ChronoGrid_GlobalLiquidityUpdated_indexedFieldOperations,
+    /**
+     * Returns the entity ChronoGrid_GlobalLiquidityUpdated from the storage by ID.
+     * If the entity is not found, creates it using provided parameters and returns it.
+     */
+    readonly getOrCreate: (entity: Entities.ChronoGrid_GlobalLiquidityUpdated_t) => Promise<Entities.ChronoGrid_GlobalLiquidityUpdated_t>,
+    /**
+     * Set the entity ChronoGrid_GlobalLiquidityUpdated in the storage.
+     */
+    readonly set: (entity: Entities.ChronoGrid_GlobalLiquidityUpdated_t) => void,
+    /**
+     * Delete the entity ChronoGrid_GlobalLiquidityUpdated from the storage.
      *
      * The 'deleteUnsafe' method is experimental and unsafe. You should manually handle all entity references after deletion to maintain database consistency.
      */

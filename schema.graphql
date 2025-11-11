@@ -33,6 +33,11 @@ type ChronoGrid_GlobalLiquidityAdded {
   newTotal: BigInt!
 }
 
+type ChronoGrid_GlobalLiquidityUpdated {
+  id: ID!
+  newTotal: BigInt!
+}
+
 type ChronoGrid_GridCreated {
   id: ID!
   gridId: String!
@@ -118,6 +123,12 @@ type ChronoGridWrapper_Deposited {
 
 type ChronoGridWrapper_EIP712DomainChanged {
   id: ID!
+}
+
+type ChronoGridWrapper_FinalBalance {
+  id: ID!
+  user: String!
+  newBalance: BigInt!
 }
 
 type ChronoGridWrapper_RelayerUpdated {

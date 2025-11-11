@@ -30,12 +30,14 @@ type handlerContext = {
   @as("ChronoGridWrapper_BetPlacedWithSession") chronoGridWrapper_BetPlacedWithSession: entityHandlerContext<Entities.ChronoGridWrapper_BetPlacedWithSession.t, Entities.ChronoGridWrapper_BetPlacedWithSession.indexedFieldOperations>,
   @as("ChronoGridWrapper_Deposited") chronoGridWrapper_Deposited: entityHandlerContext<Entities.ChronoGridWrapper_Deposited.t, Entities.ChronoGridWrapper_Deposited.indexedFieldOperations>,
   @as("ChronoGridWrapper_EIP712DomainChanged") chronoGridWrapper_EIP712DomainChanged: entityHandlerContext<Entities.ChronoGridWrapper_EIP712DomainChanged.t, Entities.ChronoGridWrapper_EIP712DomainChanged.indexedFieldOperations>,
+  @as("ChronoGridWrapper_FinalBalance") chronoGridWrapper_FinalBalance: entityHandlerContext<Entities.ChronoGridWrapper_FinalBalance.t, Entities.ChronoGridWrapper_FinalBalance.indexedFieldOperations>,
   @as("ChronoGridWrapper_RelayerUpdated") chronoGridWrapper_RelayerUpdated: entityHandlerContext<Entities.ChronoGridWrapper_RelayerUpdated.t, Entities.ChronoGridWrapper_RelayerUpdated.indexedFieldOperations>,
   @as("ChronoGridWrapper_Withdrawn") chronoGridWrapper_Withdrawn: entityHandlerContext<Entities.ChronoGridWrapper_Withdrawn.t, Entities.ChronoGridWrapper_Withdrawn.indexedFieldOperations>,
   @as("ChronoGrid_AutoClaimFailed") chronoGrid_AutoClaimFailed: entityHandlerContext<Entities.ChronoGrid_AutoClaimFailed.t, Entities.ChronoGrid_AutoClaimFailed.indexedFieldOperations>,
   @as("ChronoGrid_AutoClaimSkipped") chronoGrid_AutoClaimSkipped: entityHandlerContext<Entities.ChronoGrid_AutoClaimSkipped.t, Entities.ChronoGrid_AutoClaimSkipped.indexedFieldOperations>,
   @as("ChronoGrid_BetPlaced") chronoGrid_BetPlaced: entityHandlerContext<Entities.ChronoGrid_BetPlaced.t, Entities.ChronoGrid_BetPlaced.indexedFieldOperations>,
   @as("ChronoGrid_GlobalLiquidityAdded") chronoGrid_GlobalLiquidityAdded: entityHandlerContext<Entities.ChronoGrid_GlobalLiquidityAdded.t, Entities.ChronoGrid_GlobalLiquidityAdded.indexedFieldOperations>,
+  @as("ChronoGrid_GlobalLiquidityUpdated") chronoGrid_GlobalLiquidityUpdated: entityHandlerContext<Entities.ChronoGrid_GlobalLiquidityUpdated.t, Entities.ChronoGrid_GlobalLiquidityUpdated.indexedFieldOperations>,
   @as("ChronoGrid_GridCreated") chronoGrid_GridCreated: entityHandlerContext<Entities.ChronoGrid_GridCreated.t, Entities.ChronoGrid_GridCreated.indexedFieldOperations>,
   @as("ChronoGrid_MaxBetAmountUpdated") chronoGrid_MaxBetAmountUpdated: entityHandlerContext<Entities.ChronoGrid_MaxBetAmountUpdated.t, Entities.ChronoGrid_MaxBetAmountUpdated.indexedFieldOperations>,
   @as("ChronoGrid_OwnershipTransferred") chronoGrid_OwnershipTransferred: entityHandlerContext<Entities.ChronoGrid_OwnershipTransferred.t, Entities.ChronoGrid_OwnershipTransferred.indexedFieldOperations>,
@@ -53,6 +55,8 @@ type chronoGridWrapper_BetPlacedWithSession = Entities.ChronoGridWrapper_BetPlac
 type chronoGridWrapper_Deposited = Entities.ChronoGridWrapper_Deposited.t
 @genType.as("ChronoGridWrapper_EIP712DomainChanged")
 type chronoGridWrapper_EIP712DomainChanged = Entities.ChronoGridWrapper_EIP712DomainChanged.t
+@genType.as("ChronoGridWrapper_FinalBalance")
+type chronoGridWrapper_FinalBalance = Entities.ChronoGridWrapper_FinalBalance.t
 @genType.as("ChronoGridWrapper_RelayerUpdated")
 type chronoGridWrapper_RelayerUpdated = Entities.ChronoGridWrapper_RelayerUpdated.t
 @genType.as("ChronoGridWrapper_Withdrawn")
@@ -65,6 +69,8 @@ type chronoGrid_AutoClaimSkipped = Entities.ChronoGrid_AutoClaimSkipped.t
 type chronoGrid_BetPlaced = Entities.ChronoGrid_BetPlaced.t
 @genType.as("ChronoGrid_GlobalLiquidityAdded")
 type chronoGrid_GlobalLiquidityAdded = Entities.ChronoGrid_GlobalLiquidityAdded.t
+@genType.as("ChronoGrid_GlobalLiquidityUpdated")
+type chronoGrid_GlobalLiquidityUpdated = Entities.ChronoGrid_GlobalLiquidityUpdated.t
 @genType.as("ChronoGrid_GridCreated")
 type chronoGrid_GridCreated = Entities.ChronoGrid_GridCreated.t
 @genType.as("ChronoGrid_MaxBetAmountUpdated")
@@ -278,8 +284,8 @@ module MakeRegister = (Event: Event) => {
 }
 
 module ChronoGrid = {
-let abi = Ethers.makeAbi((%raw(`[{"type":"event","name":"AutoClaimFailed","inputs":[{"name":"user","type":"address","indexed":true},{"name":"gridId","type":"bytes32","indexed":true},{"name":"timeperiodId","type":"uint256","indexed":false},{"name":"reason","type":"string","indexed":false}],"anonymous":false},{"type":"event","name":"AutoClaimSkipped","inputs":[{"name":"user","type":"address","indexed":true},{"name":"gridId","type":"bytes32","indexed":true},{"name":"timeperiodId","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"BetPlaced","inputs":[{"name":"user","type":"address","indexed":true},{"name":"gridId","type":"bytes32","indexed":true},{"name":"timeperiodId","type":"uint256","indexed":false},{"name":"amountPaid","type":"uint256","indexed":false},{"name":"sharesReceived","type":"uint256","indexed":false},{"name":"pricePerShare","type":"uint256","indexed":false},{"name":"bAtEntry","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"GlobalLiquidityAdded","inputs":[{"name":"amount","type":"uint256","indexed":false},{"name":"newTotal","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"GridCreated","inputs":[{"name":"gridId","type":"bytes32","indexed":true},{"name":"timeperiodId","type":"uint256","indexed":true},{"name":"priceMin","type":"uint256","indexed":false},{"name":"priceMax","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"MaxBetAmountUpdated","inputs":[{"name":"oldAmount","type":"uint256","indexed":false},{"name":"newAmount","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"OwnershipTransferred","inputs":[{"name":"previousOwner","type":"address","indexed":true},{"name":"newOwner","type":"address","indexed":true}],"anonymous":false},{"type":"event","name":"TimeperiodCreated","inputs":[{"name":"timeperiodId","type":"uint256","indexed":true},{"name":"startTime","type":"uint256","indexed":false},{"name":"endTime","type":"uint256","indexed":false},{"name":"referencePrice","type":"uint256","indexed":false},{"name":"allocatedLiquidity","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"TimeperiodFinalized","inputs":[{"name":"timeperiodId","type":"uint256","indexed":true},{"name":"netResult","type":"int256","indexed":false},{"name":"returnedToGlobal","type":"uint256","indexed":false},{"name":"newGlobalPool","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"TimeperiodSettled","inputs":[{"name":"timeperiodId","type":"uint256","indexed":true},{"name":"winningGridId","type":"bytes32","indexed":true},{"name":"twapPrice","type":"uint256","indexed":false},{"name":"totalLoserBets","type":"uint256","indexed":false},{"name":"poolShare","type":"uint256","indexed":false},{"name":"winnerShare","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"WinningsClaimedEqual","inputs":[{"name":"user","type":"address","indexed":true},{"name":"gridId","type":"bytes32","indexed":true},{"name":"equalShare","type":"uint256","indexed":false},{"name":"redemptionValue","type":"uint256","indexed":false},{"name":"totalPayout","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"WrapperSet","inputs":[{"name":"oldWrapper","type":"address","indexed":true},{"name":"newWrapper","type":"address","indexed":true}],"anonymous":false}]`): Js.Json.t))
-let eventSignatures = ["AutoClaimFailed(address indexed user, bytes32 indexed gridId, uint256 timeperiodId, string reason)", "AutoClaimSkipped(address indexed user, bytes32 indexed gridId, uint256 timeperiodId)", "BetPlaced(address indexed user, bytes32 indexed gridId, uint256 timeperiodId, uint256 amountPaid, uint256 sharesReceived, uint256 pricePerShare, uint256 bAtEntry)", "GlobalLiquidityAdded(uint256 amount, uint256 newTotal)", "GridCreated(bytes32 indexed gridId, uint256 indexed timeperiodId, uint256 priceMin, uint256 priceMax)", "MaxBetAmountUpdated(uint256 oldAmount, uint256 newAmount)", "OwnershipTransferred(address indexed previousOwner, address indexed newOwner)", "TimeperiodCreated(uint256 indexed timeperiodId, uint256 startTime, uint256 endTime, uint256 referencePrice, uint256 allocatedLiquidity)", "TimeperiodFinalized(uint256 indexed timeperiodId, int256 netResult, uint256 returnedToGlobal, uint256 newGlobalPool)", "TimeperiodSettled(uint256 indexed timeperiodId, bytes32 indexed winningGridId, uint256 twapPrice, uint256 totalLoserBets, uint256 poolShare, uint256 winnerShare)", "WinningsClaimedEqual(address indexed user, bytes32 indexed gridId, uint256 equalShare, uint256 redemptionValue, uint256 totalPayout)", "WrapperSet(address indexed oldWrapper, address indexed newWrapper)"]
+let abi = Ethers.makeAbi((%raw(`[{"type":"event","name":"AutoClaimFailed","inputs":[{"name":"user","type":"address","indexed":true},{"name":"gridId","type":"bytes32","indexed":true},{"name":"timeperiodId","type":"uint256","indexed":false},{"name":"reason","type":"string","indexed":false}],"anonymous":false},{"type":"event","name":"AutoClaimSkipped","inputs":[{"name":"user","type":"address","indexed":true},{"name":"gridId","type":"bytes32","indexed":true},{"name":"timeperiodId","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"BetPlaced","inputs":[{"name":"user","type":"address","indexed":true},{"name":"gridId","type":"bytes32","indexed":true},{"name":"timeperiodId","type":"uint256","indexed":false},{"name":"amountPaid","type":"uint256","indexed":false},{"name":"sharesReceived","type":"uint256","indexed":false},{"name":"pricePerShare","type":"uint256","indexed":false},{"name":"bAtEntry","type":"uint256","indexed":false},{"name":"totalshare","type":"uint256","indexed":false},{"name":"price_min","type":"uint256","indexed":false},{"name":"price_max","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"GlobalLiquidityAdded","inputs":[{"name":"amount","type":"uint256","indexed":false},{"name":"newTotal","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"GlobalLiquidityUpdated","inputs":[{"name":"newTotal","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"GridCreated","inputs":[{"name":"gridId","type":"bytes32","indexed":true},{"name":"timeperiodId","type":"uint256","indexed":true},{"name":"priceMin","type":"uint256","indexed":false},{"name":"priceMax","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"MaxBetAmountUpdated","inputs":[{"name":"oldAmount","type":"uint256","indexed":false},{"name":"newAmount","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"OwnershipTransferred","inputs":[{"name":"previousOwner","type":"address","indexed":true},{"name":"newOwner","type":"address","indexed":true}],"anonymous":false},{"type":"event","name":"TimeperiodCreated","inputs":[{"name":"timeperiodId","type":"uint256","indexed":true},{"name":"startTime","type":"uint256","indexed":false},{"name":"endTime","type":"uint256","indexed":false},{"name":"referencePrice","type":"uint256","indexed":false},{"name":"allocatedLiquidity","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"TimeperiodFinalized","inputs":[{"name":"timeperiodId","type":"uint256","indexed":true},{"name":"netResult","type":"int256","indexed":false},{"name":"returnedToGlobal","type":"uint256","indexed":false},{"name":"newGlobalPool","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"TimeperiodSettled","inputs":[{"name":"timeperiodId","type":"uint256","indexed":true},{"name":"winningGridId","type":"bytes32","indexed":true},{"name":"twapPrice","type":"uint256","indexed":false},{"name":"totalLoserBets","type":"uint256","indexed":false},{"name":"poolShare","type":"uint256","indexed":false},{"name":"winnerShare","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"WinningsClaimedEqual","inputs":[{"name":"user","type":"address","indexed":true},{"name":"gridId","type":"bytes32","indexed":true},{"name":"equalShare","type":"uint256","indexed":false},{"name":"redemptionValue","type":"uint256","indexed":false},{"name":"totalPayout","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"WrapperSet","inputs":[{"name":"oldWrapper","type":"address","indexed":true},{"name":"newWrapper","type":"address","indexed":true}],"anonymous":false}]`): Js.Json.t))
+let eventSignatures = ["AutoClaimFailed(address indexed user, bytes32 indexed gridId, uint256 timeperiodId, string reason)", "AutoClaimSkipped(address indexed user, bytes32 indexed gridId, uint256 timeperiodId)", "BetPlaced(address indexed user, bytes32 indexed gridId, uint256 timeperiodId, uint256 amountPaid, uint256 sharesReceived, uint256 pricePerShare, uint256 bAtEntry, uint256 totalshare, uint256 price_min, uint256 price_max)", "GlobalLiquidityAdded(uint256 amount, uint256 newTotal)", "GlobalLiquidityUpdated(uint256 newTotal)", "GridCreated(bytes32 indexed gridId, uint256 indexed timeperiodId, uint256 priceMin, uint256 priceMax)", "MaxBetAmountUpdated(uint256 oldAmount, uint256 newAmount)", "OwnershipTransferred(address indexed previousOwner, address indexed newOwner)", "TimeperiodCreated(uint256 indexed timeperiodId, uint256 startTime, uint256 endTime, uint256 referencePrice, uint256 allocatedLiquidity)", "TimeperiodFinalized(uint256 indexed timeperiodId, int256 netResult, uint256 returnedToGlobal, uint256 newGlobalPool)", "TimeperiodSettled(uint256 indexed timeperiodId, bytes32 indexed winningGridId, uint256 twapPrice, uint256 totalLoserBets, uint256 poolShare, uint256 winnerShare)", "WinningsClaimedEqual(address indexed user, bytes32 indexed gridId, uint256 equalShare, uint256 redemptionValue, uint256 totalPayout)", "WrapperSet(address indexed oldWrapper, address indexed newWrapper)"]
 @genType type chainId = [#999]
 let contractName = "ChronoGrid"
 
@@ -435,13 +441,13 @@ let register = (): Internal.evmEventConfig => {
 
 module BetPlaced = {
 
-let id = "0x0ace7219a76f9cf89153bf8d738fab9a58432a7dc06da27e5ece154c9831a48a_3"
-let sighash = "0x0ace7219a76f9cf89153bf8d738fab9a58432a7dc06da27e5ece154c9831a48a"
+let id = "0x89f254b9ede6d1382ab9ec33151d4fbd35673beb1d80cd913c182e29112f4043_3"
+let sighash = "0x89f254b9ede6d1382ab9ec33151d4fbd35673beb1d80cd913c182e29112f4043"
 let name = "BetPlaced"
 let contractName = contractName
 
 @genType
-type eventArgs = {user: Address.t, gridId: string, timeperiodId: bigint, amountPaid: bigint, sharesReceived: bigint, pricePerShare: bigint, bAtEntry: bigint}
+type eventArgs = {user: Address.t, gridId: string, timeperiodId: bigint, amountPaid: bigint, sharesReceived: bigint, pricePerShare: bigint, bAtEntry: bigint, totalshare: bigint, price_min: bigint, price_max: bigint}
 @genType
 type block = Block.t
 @genType
@@ -470,7 +476,7 @@ type handler = Internal.genericHandler<handlerArgs>
 @genType
 type contractRegister = Internal.genericContractRegister<Internal.genericContractRegisterArgs<event, contractRegistrations>>
 
-let paramsRawEventSchema = S.object((s): eventArgs => {user: s.field("user", Address.schema), gridId: s.field("gridId", S.string), timeperiodId: s.field("timeperiodId", BigInt.schema), amountPaid: s.field("amountPaid", BigInt.schema), sharesReceived: s.field("sharesReceived", BigInt.schema), pricePerShare: s.field("pricePerShare", BigInt.schema), bAtEntry: s.field("bAtEntry", BigInt.schema)})
+let paramsRawEventSchema = S.object((s): eventArgs => {user: s.field("user", Address.schema), gridId: s.field("gridId", S.string), timeperiodId: s.field("timeperiodId", BigInt.schema), amountPaid: s.field("amountPaid", BigInt.schema), sharesReceived: s.field("sharesReceived", BigInt.schema), pricePerShare: s.field("pricePerShare", BigInt.schema), bAtEntry: s.field("bAtEntry", BigInt.schema), totalshare: s.field("totalshare", BigInt.schema), price_min: s.field("price_min", BigInt.schema), price_max: s.field("price_max", BigInt.schema)})
 let blockSchema = Block.schema
 let transactionSchema = Transaction.schema
 
@@ -496,7 +502,7 @@ let register = (): Internal.evmEventConfig => {
     dependsOnAddresses: !(handlerRegister->EventRegister.isWildcard) || filterByAddresses,
     blockSchema: blockSchema->(Utils.magic: S.t<block> => S.t<Internal.eventBlock>),
     transactionSchema: transactionSchema->(Utils.magic: S.t<transaction> => S.t<Internal.eventTransaction>),
-    convertHyperSyncEventArgs: (decodedEvent: HyperSyncClient.Decoder.decodedEvent) => {user: decodedEvent.indexed->Js.Array2.unsafe_get(0)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, gridId: decodedEvent.indexed->Js.Array2.unsafe_get(1)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, timeperiodId: decodedEvent.body->Js.Array2.unsafe_get(0)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, amountPaid: decodedEvent.body->Js.Array2.unsafe_get(1)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, sharesReceived: decodedEvent.body->Js.Array2.unsafe_get(2)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, pricePerShare: decodedEvent.body->Js.Array2.unsafe_get(3)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, bAtEntry: decodedEvent.body->Js.Array2.unsafe_get(4)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, }->(Utils.magic: eventArgs => Internal.eventParams),
+    convertHyperSyncEventArgs: (decodedEvent: HyperSyncClient.Decoder.decodedEvent) => {user: decodedEvent.indexed->Js.Array2.unsafe_get(0)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, gridId: decodedEvent.indexed->Js.Array2.unsafe_get(1)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, timeperiodId: decodedEvent.body->Js.Array2.unsafe_get(0)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, amountPaid: decodedEvent.body->Js.Array2.unsafe_get(1)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, sharesReceived: decodedEvent.body->Js.Array2.unsafe_get(2)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, pricePerShare: decodedEvent.body->Js.Array2.unsafe_get(3)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, bAtEntry: decodedEvent.body->Js.Array2.unsafe_get(4)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, totalshare: decodedEvent.body->Js.Array2.unsafe_get(5)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, price_min: decodedEvent.body->Js.Array2.unsafe_get(6)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, price_max: decodedEvent.body->Js.Array2.unsafe_get(7)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, }->(Utils.magic: eventArgs => Internal.eventParams),
     id,
   name,
   contractName,
@@ -568,6 +574,77 @@ let register = (): Internal.evmEventConfig => {
     blockSchema: blockSchema->(Utils.magic: S.t<block> => S.t<Internal.eventBlock>),
     transactionSchema: transactionSchema->(Utils.magic: S.t<transaction> => S.t<Internal.eventTransaction>),
     convertHyperSyncEventArgs: (decodedEvent: HyperSyncClient.Decoder.decodedEvent) => {amount: decodedEvent.body->Js.Array2.unsafe_get(0)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, newTotal: decodedEvent.body->Js.Array2.unsafe_get(1)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, }->(Utils.magic: eventArgs => Internal.eventParams),
+    id,
+  name,
+  contractName,
+  isWildcard: (handlerRegister->EventRegister.isWildcard),
+  handler: handlerRegister->EventRegister.getHandler,
+  contractRegister: handlerRegister->EventRegister.getContractRegister,
+  paramsRawEventSchema: paramsRawEventSchema->(Utils.magic: S.t<eventArgs> => S.t<Internal.eventParams>),
+  }
+}
+}
+
+module GlobalLiquidityUpdated = {
+
+let id = "0x485433a2a23ca10779696bc9eb88771f3f5c6184b4b0984cd83ad0eb1e80d01b_1"
+let sighash = "0x485433a2a23ca10779696bc9eb88771f3f5c6184b4b0984cd83ad0eb1e80d01b"
+let name = "GlobalLiquidityUpdated"
+let contractName = contractName
+
+@genType
+type eventArgs = {newTotal: bigint}
+@genType
+type block = Block.t
+@genType
+type transaction = Transaction.t
+
+@genType
+type event = {
+  /** The parameters or arguments associated with this event. */
+  params: eventArgs,
+  /** The unique identifier of the blockchain network where this event occurred. */
+  chainId: chainId,
+  /** The address of the contract that emitted this event. */
+  srcAddress: Address.t,
+  /** The index of this event's log within the block. */
+  logIndex: int,
+  /** The transaction that triggered this event. Configurable in `config.yaml` via the `field_selection` option. */
+  transaction: transaction,
+  /** The block in which this event was recorded. Configurable in `config.yaml` via the `field_selection` option. */
+  block: block,
+}
+
+@genType
+type handlerArgs = Internal.genericHandlerArgs<event, handlerContext, unit>
+@genType
+type handler = Internal.genericHandler<handlerArgs>
+@genType
+type contractRegister = Internal.genericContractRegister<Internal.genericContractRegisterArgs<event, contractRegistrations>>
+
+let paramsRawEventSchema = S.object((s): eventArgs => {newTotal: s.field("newTotal", BigInt.schema)})
+let blockSchema = Block.schema
+let transactionSchema = Transaction.schema
+
+let handlerRegister: EventRegister.t = EventRegister.make(
+  ~contractName,
+  ~eventName=name,
+)
+
+@genType
+type eventFilter = {}
+
+@genType type eventFilters = Internal.noEventFilters
+
+let register = (): Internal.evmEventConfig => {
+  let {getEventFiltersOrThrow, filterByAddresses} = LogSelection.parseEventFiltersOrThrow(~eventFilters=handlerRegister->EventRegister.getEventFilters, ~sighash, ~params=[])
+  {
+    getEventFiltersOrThrow,
+    filterByAddresses,
+    dependsOnAddresses: !(handlerRegister->EventRegister.isWildcard) || filterByAddresses,
+    blockSchema: blockSchema->(Utils.magic: S.t<block> => S.t<Internal.eventBlock>),
+    transactionSchema: transactionSchema->(Utils.magic: S.t<transaction> => S.t<Internal.eventTransaction>),
+    convertHyperSyncEventArgs: (decodedEvent: HyperSyncClient.Decoder.decodedEvent) => {newTotal: decodedEvent.body->Js.Array2.unsafe_get(0)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, }->(Utils.magic: eventArgs => Internal.eventParams),
     id,
   name,
   contractName,
@@ -1177,8 +1254,8 @@ let register = (): Internal.evmEventConfig => {
 }
 
 module ChronoGridWrapper = {
-let abi = Ethers.makeAbi((%raw(`[{"type":"event","name":"BetPlacedWithSession","inputs":[{"name":"user","type":"address","indexed":true},{"name":"sessionKey","type":"address","indexed":true},{"name":"timeperiodId","type":"uint256","indexed":false},{"name":"amount","type":"uint256","indexed":false},{"name":"sharesReceived","type":"uint256","indexed":false},{"name":"priceMin","type":"uint256","indexed":false},{"name":"priceMax","type":"uint256","indexed":false},{"name":"startTime","type":"uint256","indexed":false},{"name":"endTime","type":"uint256","indexed":false},{"name":"gridId","type":"bytes32","indexed":false}],"anonymous":false},{"type":"event","name":"Deposited","inputs":[{"name":"user","type":"address","indexed":true},{"name":"amount","type":"uint256","indexed":false},{"name":"newBalance","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"EIP712DomainChanged","inputs":[],"anonymous":false},{"type":"event","name":"RelayerUpdated","inputs":[{"name":"oldRelayer","type":"address","indexed":true},{"name":"newRelayer","type":"address","indexed":true}],"anonymous":false},{"type":"event","name":"Withdrawn","inputs":[{"name":"user","type":"address","indexed":true},{"name":"amount","type":"uint256","indexed":false},{"name":"newBalance","type":"uint256","indexed":false}],"anonymous":false}]`): Js.Json.t))
-let eventSignatures = ["BetPlacedWithSession(address indexed user, address indexed sessionKey, uint256 timeperiodId, uint256 amount, uint256 sharesReceived, uint256 priceMin, uint256 priceMax, uint256 startTime, uint256 endTime, bytes32 gridId)", "Deposited(address indexed user, uint256 amount, uint256 newBalance)", "EIP712DomainChanged()", "RelayerUpdated(address indexed oldRelayer, address indexed newRelayer)", "Withdrawn(address indexed user, uint256 amount, uint256 newBalance)"]
+let abi = Ethers.makeAbi((%raw(`[{"type":"event","name":"BetPlacedWithSession","inputs":[{"name":"user","type":"address","indexed":true},{"name":"sessionKey","type":"address","indexed":true},{"name":"timeperiodId","type":"uint256","indexed":false},{"name":"amount","type":"uint256","indexed":false},{"name":"sharesReceived","type":"uint256","indexed":false},{"name":"priceMin","type":"uint256","indexed":false},{"name":"priceMax","type":"uint256","indexed":false},{"name":"startTime","type":"uint256","indexed":false},{"name":"endTime","type":"uint256","indexed":false},{"name":"gridId","type":"bytes32","indexed":false}],"anonymous":false},{"type":"event","name":"Deposited","inputs":[{"name":"user","type":"address","indexed":true},{"name":"amount","type":"uint256","indexed":false},{"name":"newBalance","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"EIP712DomainChanged","inputs":[],"anonymous":false},{"type":"event","name":"FinalBalance","inputs":[{"name":"user","type":"address","indexed":true},{"name":"newBalance","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"RelayerUpdated","inputs":[{"name":"oldRelayer","type":"address","indexed":true},{"name":"newRelayer","type":"address","indexed":true}],"anonymous":false},{"type":"event","name":"Withdrawn","inputs":[{"name":"user","type":"address","indexed":true},{"name":"amount","type":"uint256","indexed":false},{"name":"newBalance","type":"uint256","indexed":false}],"anonymous":false}]`): Js.Json.t))
+let eventSignatures = ["BetPlacedWithSession(address indexed user, address indexed sessionKey, uint256 timeperiodId, uint256 amount, uint256 sharesReceived, uint256 priceMin, uint256 priceMax, uint256 startTime, uint256 endTime, bytes32 gridId)", "Deposited(address indexed user, uint256 amount, uint256 newBalance)", "EIP712DomainChanged()", "FinalBalance(address indexed user, uint256 newBalance)", "RelayerUpdated(address indexed oldRelayer, address indexed newRelayer)", "Withdrawn(address indexed user, uint256 amount, uint256 newBalance)"]
 @genType type chainId = [#999]
 let contractName = "ChronoGridWrapper"
 
@@ -1392,6 +1469,81 @@ let register = (): Internal.evmEventConfig => {
     blockSchema: blockSchema->(Utils.magic: S.t<block> => S.t<Internal.eventBlock>),
     transactionSchema: transactionSchema->(Utils.magic: S.t<transaction> => S.t<Internal.eventTransaction>),
     convertHyperSyncEventArgs: _ => ()->(Utils.magic: eventArgs => Internal.eventParams),
+    id,
+  name,
+  contractName,
+  isWildcard: (handlerRegister->EventRegister.isWildcard),
+  handler: handlerRegister->EventRegister.getHandler,
+  contractRegister: handlerRegister->EventRegister.getContractRegister,
+  paramsRawEventSchema: paramsRawEventSchema->(Utils.magic: S.t<eventArgs> => S.t<Internal.eventParams>),
+  }
+}
+}
+
+module FinalBalance = {
+
+let id = "0x8a0af459e8e35312556015ae71016158d498c89524d3b3addabf4fdcf69e8d30_2"
+let sighash = "0x8a0af459e8e35312556015ae71016158d498c89524d3b3addabf4fdcf69e8d30"
+let name = "FinalBalance"
+let contractName = contractName
+
+@genType
+type eventArgs = {user: Address.t, newBalance: bigint}
+@genType
+type block = Block.t
+@genType
+type transaction = Transaction.t
+
+@genType
+type event = {
+  /** The parameters or arguments associated with this event. */
+  params: eventArgs,
+  /** The unique identifier of the blockchain network where this event occurred. */
+  chainId: chainId,
+  /** The address of the contract that emitted this event. */
+  srcAddress: Address.t,
+  /** The index of this event's log within the block. */
+  logIndex: int,
+  /** The transaction that triggered this event. Configurable in `config.yaml` via the `field_selection` option. */
+  transaction: transaction,
+  /** The block in which this event was recorded. Configurable in `config.yaml` via the `field_selection` option. */
+  block: block,
+}
+
+@genType
+type handlerArgs = Internal.genericHandlerArgs<event, handlerContext, unit>
+@genType
+type handler = Internal.genericHandler<handlerArgs>
+@genType
+type contractRegister = Internal.genericContractRegister<Internal.genericContractRegisterArgs<event, contractRegistrations>>
+
+let paramsRawEventSchema = S.object((s): eventArgs => {user: s.field("user", Address.schema), newBalance: s.field("newBalance", BigInt.schema)})
+let blockSchema = Block.schema
+let transactionSchema = Transaction.schema
+
+let handlerRegister: EventRegister.t = EventRegister.make(
+  ~contractName,
+  ~eventName=name,
+)
+
+@genType
+type eventFilter = {@as("user") user?: SingleOrMultiple.t<Address.t>}
+
+@genType type eventFiltersArgs = {/** The unique identifier of the blockchain network where this event occurred. */ chainId: chainId, /** Addresses of the contracts indexing the event. */ addresses: array<Address.t>}
+
+@genType @unboxed type eventFiltersDefinition = Single(eventFilter) | Multiple(array<eventFilter>)
+
+@genType @unboxed type eventFilters = | ...eventFiltersDefinition | Dynamic(eventFiltersArgs => eventFiltersDefinition)
+
+let register = (): Internal.evmEventConfig => {
+  let {getEventFiltersOrThrow, filterByAddresses} = LogSelection.parseEventFiltersOrThrow(~eventFilters=handlerRegister->EventRegister.getEventFilters, ~sighash, ~params=["user",], ~topic1=(_eventFilter) => _eventFilter->Utils.Dict.dangerouslyGetNonOption("user")->Belt.Option.mapWithDefault([], topicFilters => topicFilters->Obj.magic->SingleOrMultiple.normalizeOrThrow->Belt.Array.map(TopicFilter.fromAddress)))
+  {
+    getEventFiltersOrThrow,
+    filterByAddresses,
+    dependsOnAddresses: !(handlerRegister->EventRegister.isWildcard) || filterByAddresses,
+    blockSchema: blockSchema->(Utils.magic: S.t<block> => S.t<Internal.eventBlock>),
+    transactionSchema: transactionSchema->(Utils.magic: S.t<transaction> => S.t<Internal.eventTransaction>),
+    convertHyperSyncEventArgs: (decodedEvent: HyperSyncClient.Decoder.decodedEvent) => {user: decodedEvent.indexed->Js.Array2.unsafe_get(0)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, newBalance: decodedEvent.body->Js.Array2.unsafe_get(0)->HyperSyncClient.Decoder.toUnderlying->Utils.magic, }->(Utils.magic: eventArgs => Internal.eventParams),
     id,
   name,
   contractName,
