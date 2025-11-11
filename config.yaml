@@ -6,7 +6,7 @@ networks:
   contracts:
   - name: ChronoGrid
     address:
-    - 0x1376340dDEC2C3Fe52a4a857367f33fbfBd298BD
+    - 0x454Cf0d4df0DFc5bbaE5CfD969edc8498c7c796C
     handler: src/EventHandlers.ts
     events:
     - event: AutoClaimFailed(address indexed user, bytes32 indexed gridId, uint256 timeperiodId, string reason)
@@ -23,7 +23,7 @@ networks:
     - event: WrapperSet(address indexed oldWrapper, address indexed newWrapper)
   - name: ChronoGridWrapper
     address:
-    - 0x65De8542bD4e42a3a3722Db829ad2bCCbA1e369c
+    - 0x3D3288E7BE46cc997DC0F73D20F800D4AfD479C6
     handler: src/EventHandlers.ts
     events:
     - event: BetPlacedWithSession(address indexed user, address indexed sessionKey, uint256 timeperiodId, uint256 amount, uint256 sharesReceived, uint256 priceMin, uint256 priceMax, uint256 startTime, uint256 endTime, bytes32 gridId)

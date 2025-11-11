@@ -21,7 +21,9 @@ import {
   ChronoGridWrapper_EIP712DomainChanged,
   ChronoGridWrapper_RelayerUpdated,
   ChronoGridWrapper_Withdrawn,
-} from "generated";
+} from "../generated";
+
+
 
 import {
   insertAutoClaimFailed,

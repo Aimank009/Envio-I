@@ -1,0 +1,241 @@
+/* TypeScript file generated from Handlers.res by genType. */
+
+/* eslint-disable */
+/* tslint:disable */
+
+const HandlersJS = require('./Handlers.res.js');
+
+import type {ChronoGridWrapper_BetPlacedWithSession_eventFilters as Types_ChronoGridWrapper_BetPlacedWithSession_eventFilters} from './Types.gen';
+
+import type {ChronoGridWrapper_BetPlacedWithSession_event as Types_ChronoGridWrapper_BetPlacedWithSession_event} from './Types.gen';
+
+import type {ChronoGridWrapper_Deposited_eventFilters as Types_ChronoGridWrapper_Deposited_eventFilters} from './Types.gen';
+
+import type {ChronoGridWrapper_Deposited_event as Types_ChronoGridWrapper_Deposited_event} from './Types.gen';
+
+import type {ChronoGridWrapper_EIP712DomainChanged_eventFilters as Types_ChronoGridWrapper_EIP712DomainChanged_eventFilters} from './Types.gen';
+
+import type {ChronoGridWrapper_EIP712DomainChanged_event as Types_ChronoGridWrapper_EIP712DomainChanged_event} from './Types.gen';
+
+import type {ChronoGridWrapper_RelayerUpdated_eventFilters as Types_ChronoGridWrapper_RelayerUpdated_eventFilters} from './Types.gen';
+
+import type {ChronoGridWrapper_RelayerUpdated_event as Types_ChronoGridWrapper_RelayerUpdated_event} from './Types.gen';
+
+import type {ChronoGridWrapper_Withdrawn_eventFilters as Types_ChronoGridWrapper_Withdrawn_eventFilters} from './Types.gen';
+
+import type {ChronoGridWrapper_Withdrawn_event as Types_ChronoGridWrapper_Withdrawn_event} from './Types.gen';
+
+import type {ChronoGrid_AutoClaimFailed_eventFilters as Types_ChronoGrid_AutoClaimFailed_eventFilters} from './Types.gen';
+
+import type {ChronoGrid_AutoClaimFailed_event as Types_ChronoGrid_AutoClaimFailed_event} from './Types.gen';
+
+import type {ChronoGrid_AutoClaimSkipped_eventFilters as Types_ChronoGrid_AutoClaimSkipped_eventFilters} from './Types.gen';
+
+import type {ChronoGrid_AutoClaimSkipped_event as Types_ChronoGrid_AutoClaimSkipped_event} from './Types.gen';
+
+import type {ChronoGrid_BetPlaced_eventFilters as Types_ChronoGrid_BetPlaced_eventFilters} from './Types.gen';
+
+import type {ChronoGrid_BetPlaced_event as Types_ChronoGrid_BetPlaced_event} from './Types.gen';
+
+import type {ChronoGrid_GlobalLiquidityAdded_eventFilters as Types_ChronoGrid_GlobalLiquidityAdded_eventFilters} from './Types.gen';
+
+import type {ChronoGrid_GlobalLiquidityAdded_event as Types_ChronoGrid_GlobalLiquidityAdded_event} from './Types.gen';
+
+import type {ChronoGrid_GridCreated_eventFilters as Types_ChronoGrid_GridCreated_eventFilters} from './Types.gen';
+
+import type {ChronoGrid_GridCreated_event as Types_ChronoGrid_GridCreated_event} from './Types.gen';
+
+import type {ChronoGrid_MaxBetAmountUpdated_eventFilters as Types_ChronoGrid_MaxBetAmountUpdated_eventFilters} from './Types.gen';
+
+import type {ChronoGrid_MaxBetAmountUpdated_event as Types_ChronoGrid_MaxBetAmountUpdated_event} from './Types.gen';
+
+import type {ChronoGrid_OwnershipTransferred_eventFilters as Types_ChronoGrid_OwnershipTransferred_eventFilters} from './Types.gen';
+
+import type {ChronoGrid_OwnershipTransferred_event as Types_ChronoGrid_OwnershipTransferred_event} from './Types.gen';
+
+import type {ChronoGrid_TimeperiodCreated_eventFilters as Types_ChronoGrid_TimeperiodCreated_eventFilters} from './Types.gen';
+
+import type {ChronoGrid_TimeperiodCreated_event as Types_ChronoGrid_TimeperiodCreated_event} from './Types.gen';
+
+import type {ChronoGrid_TimeperiodFinalized_eventFilters as Types_ChronoGrid_TimeperiodFinalized_eventFilters} from './Types.gen';
+
+import type {ChronoGrid_TimeperiodFinalized_event as Types_ChronoGrid_TimeperiodFinalized_event} from './Types.gen';
+
+import type {ChronoGrid_TimeperiodSettled_eventFilters as Types_ChronoGrid_TimeperiodSettled_eventFilters} from './Types.gen';
+
+import type {ChronoGrid_TimeperiodSettled_event as Types_ChronoGrid_TimeperiodSettled_event} from './Types.gen';
+
+import type {ChronoGrid_WinningsClaimedEqual_eventFilters as Types_ChronoGrid_WinningsClaimedEqual_eventFilters} from './Types.gen';
+
+import type {ChronoGrid_WinningsClaimedEqual_event as Types_ChronoGrid_WinningsClaimedEqual_event} from './Types.gen';
+
+import type {ChronoGrid_WrapperSet_eventFilters as Types_ChronoGrid_WrapperSet_eventFilters} from './Types.gen';
+
+import type {ChronoGrid_WrapperSet_event as Types_ChronoGrid_WrapperSet_event} from './Types.gen';
+
+import type {HandlerTypes_eventConfig as Types_HandlerTypes_eventConfig} from './Types.gen';
+
+import type {chain as Types_chain} from './Types.gen';
+
+import type {contractRegistrations as Types_contractRegistrations} from './Types.gen';
+
+import type {fnWithEventConfig as Types_fnWithEventConfig} from './Types.gen';
+
+import type {genericContractRegisterArgs as Internal_genericContractRegisterArgs} from 'envio/src/Internal.gen';
+
+import type {genericContractRegister as Internal_genericContractRegister} from 'envio/src/Internal.gen';
+
+import type {genericHandlerArgs as Internal_genericHandlerArgs} from 'envio/src/Internal.gen';
+
+import type {genericHandler as Internal_genericHandler} from 'envio/src/Internal.gen';
+
+import type {handlerContext as Types_handlerContext} from './Types.gen';
+
+import type {onBlockArgs as Envio_onBlockArgs} from 'envio/src/Envio.gen';
+
+import type {onBlockOptions as Envio_onBlockOptions} from 'envio/src/Envio.gen';
+
+export const ChronoGrid_AutoClaimFailed_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_AutoClaimFailed_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_AutoClaimFailed_eventFilters>> = HandlersJS.ChronoGrid.AutoClaimFailed.contractRegister as any;
+
+export const ChronoGrid_AutoClaimFailed_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_AutoClaimFailed_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_AutoClaimFailed_eventFilters>> = HandlersJS.ChronoGrid.AutoClaimFailed.handler as any;
+
+export const ChronoGrid_AutoClaimSkipped_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_AutoClaimSkipped_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_AutoClaimSkipped_eventFilters>> = HandlersJS.ChronoGrid.AutoClaimSkipped.contractRegister as any;
+
+export const ChronoGrid_AutoClaimSkipped_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_AutoClaimSkipped_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_AutoClaimSkipped_eventFilters>> = HandlersJS.ChronoGrid.AutoClaimSkipped.handler as any;
+
+export const ChronoGrid_BetPlaced_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_BetPlaced_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_BetPlaced_eventFilters>> = HandlersJS.ChronoGrid.BetPlaced.contractRegister as any;
+
+export const ChronoGrid_BetPlaced_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_BetPlaced_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_BetPlaced_eventFilters>> = HandlersJS.ChronoGrid.BetPlaced.handler as any;
+
+export const ChronoGrid_GlobalLiquidityAdded_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_GlobalLiquidityAdded_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GlobalLiquidityAdded_eventFilters>> = HandlersJS.ChronoGrid.GlobalLiquidityAdded.contractRegister as any;
+
+export const ChronoGrid_GlobalLiquidityAdded_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_GlobalLiquidityAdded_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GlobalLiquidityAdded_eventFilters>> = HandlersJS.ChronoGrid.GlobalLiquidityAdded.handler as any;
+
+export const ChronoGrid_GridCreated_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_GridCreated_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GridCreated_eventFilters>> = HandlersJS.ChronoGrid.GridCreated.contractRegister as any;
+
+export const ChronoGrid_GridCreated_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_GridCreated_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GridCreated_eventFilters>> = HandlersJS.ChronoGrid.GridCreated.handler as any;
+
+export const ChronoGrid_MaxBetAmountUpdated_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_MaxBetAmountUpdated_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_MaxBetAmountUpdated_eventFilters>> = HandlersJS.ChronoGrid.MaxBetAmountUpdated.contractRegister as any;
+
+export const ChronoGrid_MaxBetAmountUpdated_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_MaxBetAmountUpdated_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_MaxBetAmountUpdated_eventFilters>> = HandlersJS.ChronoGrid.MaxBetAmountUpdated.handler as any;
+
+export const ChronoGrid_OwnershipTransferred_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_OwnershipTransferred_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_OwnershipTransferred_eventFilters>> = HandlersJS.ChronoGrid.OwnershipTransferred.contractRegister as any;
+
+export const ChronoGrid_OwnershipTransferred_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_OwnershipTransferred_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_OwnershipTransferred_eventFilters>> = HandlersJS.ChronoGrid.OwnershipTransferred.handler as any;
+
+export const ChronoGrid_TimeperiodCreated_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_TimeperiodCreated_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_TimeperiodCreated_eventFilters>> = HandlersJS.ChronoGrid.TimeperiodCreated.contractRegister as any;
+
+export const ChronoGrid_TimeperiodCreated_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_TimeperiodCreated_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_TimeperiodCreated_eventFilters>> = HandlersJS.ChronoGrid.TimeperiodCreated.handler as any;
+
+export const ChronoGrid_TimeperiodFinalized_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_TimeperiodFinalized_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_TimeperiodFinalized_eventFilters>> = HandlersJS.ChronoGrid.TimeperiodFinalized.contractRegister as any;
+
+export const ChronoGrid_TimeperiodFinalized_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_TimeperiodFinalized_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_TimeperiodFinalized_eventFilters>> = HandlersJS.ChronoGrid.TimeperiodFinalized.handler as any;
+
+export const ChronoGrid_TimeperiodSettled_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_TimeperiodSettled_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_TimeperiodSettled_eventFilters>> = HandlersJS.ChronoGrid.TimeperiodSettled.contractRegister as any;
+
+export const ChronoGrid_TimeperiodSettled_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_TimeperiodSettled_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_TimeperiodSettled_eventFilters>> = HandlersJS.ChronoGrid.TimeperiodSettled.handler as any;
+
+export const ChronoGrid_WinningsClaimedEqual_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_WinningsClaimedEqual_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_WinningsClaimedEqual_eventFilters>> = HandlersJS.ChronoGrid.WinningsClaimedEqual.contractRegister as any;
+
+export const ChronoGrid_WinningsClaimedEqual_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_WinningsClaimedEqual_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_WinningsClaimedEqual_eventFilters>> = HandlersJS.ChronoGrid.WinningsClaimedEqual.handler as any;
+
+export const ChronoGrid_WrapperSet_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_WrapperSet_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_WrapperSet_eventFilters>> = HandlersJS.ChronoGrid.WrapperSet.contractRegister as any;
+
+export const ChronoGrid_WrapperSet_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_WrapperSet_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_WrapperSet_eventFilters>> = HandlersJS.ChronoGrid.WrapperSet.handler as any;
+
+export const ChronoGridWrapper_BetPlacedWithSession_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_BetPlacedWithSession_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_BetPlacedWithSession_eventFilters>> = HandlersJS.ChronoGridWrapper.BetPlacedWithSession.contractRegister as any;
+
+export const ChronoGridWrapper_BetPlacedWithSession_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_BetPlacedWithSession_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_BetPlacedWithSession_eventFilters>> = HandlersJS.ChronoGridWrapper.BetPlacedWithSession.handler as any;
+
+export const ChronoGridWrapper_Deposited_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_Deposited_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_Deposited_eventFilters>> = HandlersJS.ChronoGridWrapper.Deposited.contractRegister as any;
+
+export const ChronoGridWrapper_Deposited_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_Deposited_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_Deposited_eventFilters>> = HandlersJS.ChronoGridWrapper.Deposited.handler as any;
+
+export const ChronoGridWrapper_EIP712DomainChanged_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_EIP712DomainChanged_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_EIP712DomainChanged_eventFilters>> = HandlersJS.ChronoGridWrapper.EIP712DomainChanged.contractRegister as any;
+
+export const ChronoGridWrapper_EIP712DomainChanged_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_EIP712DomainChanged_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_EIP712DomainChanged_eventFilters>> = HandlersJS.ChronoGridWrapper.EIP712DomainChanged.handler as any;
+
+export const ChronoGridWrapper_RelayerUpdated_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_RelayerUpdated_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_RelayerUpdated_eventFilters>> = HandlersJS.ChronoGridWrapper.RelayerUpdated.contractRegister as any;
+
+export const ChronoGridWrapper_RelayerUpdated_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_RelayerUpdated_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_RelayerUpdated_eventFilters>> = HandlersJS.ChronoGridWrapper.RelayerUpdated.handler as any;
+
+export const ChronoGridWrapper_Withdrawn_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_Withdrawn_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_Withdrawn_eventFilters>> = HandlersJS.ChronoGridWrapper.Withdrawn.contractRegister as any;
+
+export const ChronoGridWrapper_Withdrawn_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_Withdrawn_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_Withdrawn_eventFilters>> = HandlersJS.ChronoGridWrapper.Withdrawn.handler as any;
+
+/** Register a Block Handler. It'll be called for every block by default. */
+export const onBlock: (_1:Envio_onBlockOptions<Types_chain>, _2:((_1:Envio_onBlockArgs<Types_handlerContext>) => Promise<void>)) => void = HandlersJS.onBlock as any;
+
+export const ChronoGrid: {
+  TimeperiodFinalized: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_TimeperiodFinalized_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_TimeperiodFinalized_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_TimeperiodFinalized_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_TimeperiodFinalized_eventFilters>>
+  }; 
+  OwnershipTransferred: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_OwnershipTransferred_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_OwnershipTransferred_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_OwnershipTransferred_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_OwnershipTransferred_eventFilters>>
+  }; 
+  GridCreated: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_GridCreated_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GridCreated_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_GridCreated_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GridCreated_eventFilters>>
+  }; 
+  MaxBetAmountUpdated: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_MaxBetAmountUpdated_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_MaxBetAmountUpdated_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_MaxBetAmountUpdated_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_MaxBetAmountUpdated_eventFilters>>
+  }; 
+  TimeperiodSettled: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_TimeperiodSettled_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_TimeperiodSettled_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_TimeperiodSettled_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_TimeperiodSettled_eventFilters>>
+  }; 
+  AutoClaimSkipped: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_AutoClaimSkipped_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_AutoClaimSkipped_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_AutoClaimSkipped_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_AutoClaimSkipped_eventFilters>>
+  }; 
+  BetPlaced: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_BetPlaced_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_BetPlaced_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_BetPlaced_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_BetPlaced_eventFilters>>
+  }; 
+  TimeperiodCreated: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_TimeperiodCreated_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_TimeperiodCreated_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_TimeperiodCreated_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_TimeperiodCreated_eventFilters>>
+  }; 
+  WinningsClaimedEqual: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_WinningsClaimedEqual_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_WinningsClaimedEqual_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_WinningsClaimedEqual_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_WinningsClaimedEqual_eventFilters>>
+  }; 
+  AutoClaimFailed: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_AutoClaimFailed_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_AutoClaimFailed_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_AutoClaimFailed_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_AutoClaimFailed_eventFilters>>
+  }; 
+  GlobalLiquidityAdded: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_GlobalLiquidityAdded_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GlobalLiquidityAdded_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_GlobalLiquidityAdded_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_GlobalLiquidityAdded_eventFilters>>
+  }; 
+  WrapperSet: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGrid_WrapperSet_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_WrapperSet_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGrid_WrapperSet_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGrid_WrapperSet_eventFilters>>
+  }
+} = HandlersJS.ChronoGrid as any;
+
+export const ChronoGridWrapper: {
+  RelayerUpdated: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_RelayerUpdated_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_RelayerUpdated_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_RelayerUpdated_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_RelayerUpdated_eventFilters>>
+  }; 
+  EIP712DomainChanged: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_EIP712DomainChanged_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_EIP712DomainChanged_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_EIP712DomainChanged_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_EIP712DomainChanged_eventFilters>>
+  }; 
+  BetPlacedWithSession: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_BetPlacedWithSession_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_BetPlacedWithSession_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_BetPlacedWithSession_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_BetPlacedWithSession_eventFilters>>
+  }; 
+  Deposited: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_Deposited_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_Deposited_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_Deposited_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_Deposited_eventFilters>>
+  }; 
+  Withdrawn: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_Withdrawn_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_Withdrawn_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_Withdrawn_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_Withdrawn_eventFilters>>
+  }
+} = HandlersJS.ChronoGridWrapper as any;
