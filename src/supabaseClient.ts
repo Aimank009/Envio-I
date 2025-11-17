@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
+
 // Load environment variables from .env
 // Use process.cwd() to load from the project root directory
 const envPath = path.join(process.cwd(), '.env');
