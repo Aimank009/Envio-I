@@ -39,7 +39,7 @@ let publicConfig = ChainMap.fromArrayUnsafe([
           name: "ChronoGrid",
           abi: Types.ChronoGrid.abi,
           addresses: [
-            "0x454Cf0d4df0DFc5bbaE5CfD969edc8498c7c796C",
+            "0x35b5585aE3eA66015e3A6499a4f72Bf66927bdBa",
           ],
           events: [
             Types.ChronoGrid.AutoClaimFailed.name,
@@ -64,7 +64,7 @@ let publicConfig = ChainMap.fromArrayUnsafe([
           name: "ChronoGridWrapper",
           abi: Types.ChronoGridWrapper.abi,
           addresses: [
-            "0x3D3288E7BE46cc997DC0F73D20F800D4AfD479C6",
+            "0x43e3A4d6f27DB8b06Ff88AbC59C07DCc5c42C1Dd",
           ],
           events: [
             Types.ChronoGridWrapper.BetPlacedWithSession.name,

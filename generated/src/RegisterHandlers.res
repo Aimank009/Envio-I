@@ -31,7 +31,7 @@ let registerContractHandlers = (
             InternalConfig.name: "ChronoGrid",
             abi: Types.ChronoGrid.abi,
             addresses: [
-              "0x454Cf0d4df0DFc5bbaE5CfD969edc8498c7c796C"->Address.Evm.fromStringOrThrow
+              "0x35b5585aE3eA66015e3A6499a4f72Bf66927bdBa"->Address.Evm.fromStringOrThrow
 ,
             ],
             events: [
@@ -55,7 +55,7 @@ let registerContractHandlers = (
             InternalConfig.name: "ChronoGridWrapper",
             abi: Types.ChronoGridWrapper.abi,
             addresses: [
-              "0x3D3288E7BE46cc997DC0F73D20F800D4AfD479C6"->Address.Evm.fromStringOrThrow
+              "0x43e3A4d6f27DB8b06Ff88AbC59C07DCc5c42C1Dd"->Address.Evm.fromStringOrThrow
 ,
             ],
             events: [
