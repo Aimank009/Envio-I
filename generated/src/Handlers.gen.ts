@@ -25,6 +25,10 @@ import type {ChronoGridWrapper_RelayerUpdated_eventFilters as Types_ChronoGridWr
 
 import type {ChronoGridWrapper_RelayerUpdated_event as Types_ChronoGridWrapper_RelayerUpdated_event} from './Types.gen';
 
+import type {ChronoGridWrapper_UpdatedPnl_eventFilters as Types_ChronoGridWrapper_UpdatedPnl_eventFilters} from './Types.gen';
+
+import type {ChronoGridWrapper_UpdatedPnl_event as Types_ChronoGridWrapper_UpdatedPnl_event} from './Types.gen';
+
 import type {ChronoGridWrapper_Withdrawn_eventFilters as Types_ChronoGridWrapper_Withdrawn_eventFilters} from './Types.gen';
 
 import type {ChronoGridWrapper_Withdrawn_event as Types_ChronoGridWrapper_Withdrawn_event} from './Types.gen';
@@ -175,6 +179,10 @@ export const ChronoGridWrapper_RelayerUpdated_contractRegister: Types_fnWithEven
 
 export const ChronoGridWrapper_RelayerUpdated_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_RelayerUpdated_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_RelayerUpdated_eventFilters>> = HandlersJS.ChronoGridWrapper.RelayerUpdated.handler as any;
 
+export const ChronoGridWrapper_UpdatedPnl_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_UpdatedPnl_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_UpdatedPnl_eventFilters>> = HandlersJS.ChronoGridWrapper.UpdatedPnl.contractRegister as any;
+
+export const ChronoGridWrapper_UpdatedPnl_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_UpdatedPnl_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_UpdatedPnl_eventFilters>> = HandlersJS.ChronoGridWrapper.UpdatedPnl.handler as any;
+
 export const ChronoGridWrapper_Withdrawn_contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_Withdrawn_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_Withdrawn_eventFilters>> = HandlersJS.ChronoGridWrapper.Withdrawn.contractRegister as any;
 
 export const ChronoGridWrapper_Withdrawn_handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_Withdrawn_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_Withdrawn_eventFilters>> = HandlersJS.ChronoGridWrapper.Withdrawn.handler as any;
@@ -245,6 +253,10 @@ export const ChronoGridWrapper: {
   EIP712DomainChanged: {
     handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_EIP712DomainChanged_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_EIP712DomainChanged_eventFilters>>; 
     contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_EIP712DomainChanged_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_EIP712DomainChanged_eventFilters>>
+  }; 
+  UpdatedPnl: {
+    handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_UpdatedPnl_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_UpdatedPnl_eventFilters>>; 
+    contractRegister: Types_fnWithEventConfig<Internal_genericContractRegister<Internal_genericContractRegisterArgs<Types_ChronoGridWrapper_UpdatedPnl_event,Types_contractRegistrations>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_UpdatedPnl_eventFilters>>
   }; 
   BetPlacedWithSession: {
     handler: Types_fnWithEventConfig<Internal_genericHandler<Internal_genericHandlerArgs<Types_ChronoGridWrapper_BetPlacedWithSession_event,Types_handlerContext,void>>,Types_HandlerTypes_eventConfig<Types_ChronoGridWrapper_BetPlacedWithSession_eventFilters>>; 

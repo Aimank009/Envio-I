@@ -32,6 +32,7 @@ networks:
     - event: EIP712DomainChanged()
     - event: FinalBalance(address indexed user, uint256 newBalance)
     - event: RelayerUpdated(address indexed oldRelayer, address indexed newRelayer)
+    - event: UpdatedPnl(address indexed user, int256 pnl)
     - event: Withdrawn(address indexed user, uint256 amount, uint256 newBalance)
 unordered_multichain_mode: true
 preload_handlers: true

@@ -722,3 +722,36 @@ export async function insertWithdrawn(data: {
     return { success: false, error };
   }
 }
+
+// 18. UpdatedPnl
+export async function insertUpdatedPnl(data: {
+  id: string;
+  user: string;
+  pnl: string;
+  blockNumber?: number;
+  timestamp?: string;
+}) {
+  try {
+    const { data: result, error } = await supabase
+      .from('updated_pnl')
+      .insert([{
+        event_id: data.id,
+        user_address: data.user,
+        pnl: data.pnl,
+        block_number: data.blockNumber,
+        timestamp: data.timestamp,
+        created_at: new Date().toISOString(),
+      }]);
+
+    if (error) {
+      console.error('❌ Supabase insert error (UpdatedPnl):', error);
+      return { success: false, error };
+    }
+
+    console.log('✅ UpdatedPnl sent to Supabase');
+    return { success: true, data: result };
+  } catch (error: any) {
+    console.error('❌ Supabase error (UpdatedPnl):', error.message);
+    return { success: false, error };
+  }
+}

@@ -11,6 +11,7 @@ export type EntityType_t =
   | "ChronoGridWrapper_EIP712DomainChanged"
   | "ChronoGridWrapper_FinalBalance"
   | "ChronoGridWrapper_RelayerUpdated"
+  | "ChronoGridWrapper_UpdatedPnl"
   | "ChronoGridWrapper_Withdrawn"
   | "ChronoGrid_AutoClaimFailed"
   | "ChronoGrid_AutoClaimSkipped"

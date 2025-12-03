@@ -22,6 +22,7 @@ module ChronoGridWrapper = {
   module EIP712DomainChanged = Types.MakeRegister(Types.ChronoGridWrapper.EIP712DomainChanged)
   module FinalBalance = Types.MakeRegister(Types.ChronoGridWrapper.FinalBalance)
   module RelayerUpdated = Types.MakeRegister(Types.ChronoGridWrapper.RelayerUpdated)
+  module UpdatedPnl = Types.MakeRegister(Types.ChronoGridWrapper.UpdatedPnl)
   module Withdrawn = Types.MakeRegister(Types.ChronoGridWrapper.Withdrawn)
 }
 

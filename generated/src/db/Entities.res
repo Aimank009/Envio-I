@@ -439,6 +439,69 @@ module ChronoGridWrapper_RelayerUpdated = {
   external castToInternal: t => Internal.entity = "%identity"
 }
 
+module ChronoGridWrapper_UpdatedPnl = {
+  let name = (ChronoGridWrapper_UpdatedPnl :> string)
+  @genType
+  type t = {
+    id: id,
+    pnl: bigint,
+    user: string,
+  }
+
+  let schema = S.object((s): t => {
+    id: s.field("id", S.string),
+    pnl: s.field("pnl", BigInt.schema),
+    user: s.field("user", S.string),
+  })
+
+  let rowsSchema = S.array(schema)
+
+  @genType
+  type indexedFieldOperations = {
+    
+  }
+
+  let table = mkTable(
+    (name :> string),
+    ~fields=[
+      mkField(
+      "id", 
+      Text,
+      ~fieldSchema=S.string,
+      ~isPrimaryKey,
+      
+      
+      
+      
+      ),
+      mkField(
+      "pnl", 
+      Numeric,
+      ~fieldSchema=BigInt.schema,
+      
+      
+      
+      
+      
+      ),
+      mkField(
+      "user", 
+      Text,
+      ~fieldSchema=S.string,
+      
+      
+      
+      
+      
+      ),
+    ],
+  )
+
+  let entityHistory = table->EntityHistory.fromTable(~schema)
+
+  external castToInternal: t => Internal.entity = "%identity"
+}
+
 module ChronoGridWrapper_Withdrawn = {
   let name = (ChronoGridWrapper_Withdrawn :> string)
   @genType
@@ -1627,6 +1690,7 @@ let userEntities = [
   module(ChronoGridWrapper_EIP712DomainChanged),
   module(ChronoGridWrapper_FinalBalance),
   module(ChronoGridWrapper_RelayerUpdated),
+  module(ChronoGridWrapper_UpdatedPnl),
   module(ChronoGridWrapper_Withdrawn),
   module(ChronoGrid_AutoClaimFailed),
   module(ChronoGrid_AutoClaimSkipped),

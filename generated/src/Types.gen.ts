@@ -13,6 +13,8 @@ import type {ChronoGridWrapper_FinalBalance_t as Entities_ChronoGridWrapper_Fina
 
 import type {ChronoGridWrapper_RelayerUpdated_t as Entities_ChronoGridWrapper_RelayerUpdated_t} from '../src/db/Entities.gen';
 
+import type {ChronoGridWrapper_UpdatedPnl_t as Entities_ChronoGridWrapper_UpdatedPnl_t} from '../src/db/Entities.gen';
+
 import type {ChronoGridWrapper_Withdrawn_t as Entities_ChronoGridWrapper_Withdrawn_t} from '../src/db/Entities.gen';
 
 import type {ChronoGrid_AutoClaimFailed_t as Entities_ChronoGrid_AutoClaimFailed_t} from '../src/db/Entities.gen';
@@ -99,6 +101,9 @@ export type ChronoGridWrapper_FinalBalance = chronoGridWrapper_FinalBalance;
 
 export type chronoGridWrapper_RelayerUpdated = Entities_ChronoGridWrapper_RelayerUpdated_t;
 export type ChronoGridWrapper_RelayerUpdated = chronoGridWrapper_RelayerUpdated;
+
+export type chronoGridWrapper_UpdatedPnl = Entities_ChronoGridWrapper_UpdatedPnl_t;
+export type ChronoGridWrapper_UpdatedPnl = chronoGridWrapper_UpdatedPnl;
 
 export type chronoGridWrapper_Withdrawn = Entities_ChronoGridWrapper_Withdrawn_t;
 export type ChronoGridWrapper_Withdrawn = chronoGridWrapper_Withdrawn;
@@ -1011,6 +1016,50 @@ export type ChronoGridWrapper_RelayerUpdated_eventFilters =
     ChronoGridWrapper_RelayerUpdated_eventFilter
   | ChronoGridWrapper_RelayerUpdated_eventFilter[]
   | ((_1:ChronoGridWrapper_RelayerUpdated_eventFiltersArgs) => ChronoGridWrapper_RelayerUpdated_eventFiltersDefinition);
+
+export type ChronoGridWrapper_UpdatedPnl_eventArgs = { readonly user: Address_t; readonly pnl: bigint };
+
+export type ChronoGridWrapper_UpdatedPnl_block = Block_t;
+
+export type ChronoGridWrapper_UpdatedPnl_transaction = Transaction_t;
+
+export type ChronoGridWrapper_UpdatedPnl_event = {
+  /** The parameters or arguments associated with this event. */
+  readonly params: ChronoGridWrapper_UpdatedPnl_eventArgs; 
+  /** The unique identifier of the blockchain network where this event occurred. */
+  readonly chainId: ChronoGridWrapper_chainId; 
+  /** The address of the contract that emitted this event. */
+  readonly srcAddress: Address_t; 
+  /** The index of this event's log within the block. */
+  readonly logIndex: number; 
+  /** The transaction that triggered this event. Configurable in `config.yaml` via the `field_selection` option. */
+  readonly transaction: ChronoGridWrapper_UpdatedPnl_transaction; 
+  /** The block in which this event was recorded. Configurable in `config.yaml` via the `field_selection` option. */
+  readonly block: ChronoGridWrapper_UpdatedPnl_block
+};
+
+export type ChronoGridWrapper_UpdatedPnl_handlerArgs = Internal_genericHandlerArgs<ChronoGridWrapper_UpdatedPnl_event,handlerContext,void>;
+
+export type ChronoGridWrapper_UpdatedPnl_handler = Internal_genericHandler<ChronoGridWrapper_UpdatedPnl_handlerArgs>;
+
+export type ChronoGridWrapper_UpdatedPnl_contractRegister = Internal_genericContractRegister<Internal_genericContractRegisterArgs<ChronoGridWrapper_UpdatedPnl_event,contractRegistrations>>;
+
+export type ChronoGridWrapper_UpdatedPnl_eventFilter = { readonly user?: SingleOrMultiple_t<Address_t> };
+
+export type ChronoGridWrapper_UpdatedPnl_eventFiltersArgs = { 
+/** The unique identifier of the blockchain network where this event occurred. */
+readonly chainId: ChronoGridWrapper_chainId; 
+/** Addresses of the contracts indexing the event. */
+readonly addresses: Address_t[] };
+
+export type ChronoGridWrapper_UpdatedPnl_eventFiltersDefinition = 
+    ChronoGridWrapper_UpdatedPnl_eventFilter
+  | ChronoGridWrapper_UpdatedPnl_eventFilter[];
+
+export type ChronoGridWrapper_UpdatedPnl_eventFilters = 
+    ChronoGridWrapper_UpdatedPnl_eventFilter
+  | ChronoGridWrapper_UpdatedPnl_eventFilter[]
+  | ((_1:ChronoGridWrapper_UpdatedPnl_eventFiltersArgs) => ChronoGridWrapper_UpdatedPnl_eventFiltersDefinition);
 
 export type ChronoGridWrapper_Withdrawn_eventArgs = {
   readonly user: Address_t; 

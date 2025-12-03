@@ -144,3 +144,8 @@ type ChronoGridWrapper_Withdrawn {
   newBalance: BigInt!
 }
 
+type ChronoGridWrapper_UpdatedPnl {
+  id: ID!
+  user: String!
+  pnl: BigInt!
+}

@@ -15,6 +15,8 @@ import type {ChronoGridWrapper_FinalBalance_event as Types_ChronoGridWrapper_Fin
 
 import type {ChronoGridWrapper_RelayerUpdated_event as Types_ChronoGridWrapper_RelayerUpdated_event} from './Types.gen';
 
+import type {ChronoGridWrapper_UpdatedPnl_event as Types_ChronoGridWrapper_UpdatedPnl_event} from './Types.gen';
+
 import type {ChronoGridWrapper_Withdrawn_event as Types_ChronoGridWrapper_Withdrawn_event} from './Types.gen';
 
 import type {ChronoGrid_AutoClaimFailed_event as Types_ChronoGrid_AutoClaimFailed_event} from './Types.gen';
@@ -206,6 +208,12 @@ export type ChronoGridWrapper_RelayerUpdated_createMockArgs = {
   readonly mockEventData?: EventFunctions_mockEventData
 };
 
+export type ChronoGridWrapper_UpdatedPnl_createMockArgs = {
+  readonly user?: Address_t; 
+  readonly pnl?: bigint; 
+  readonly mockEventData?: EventFunctions_mockEventData
+};
+
 export type ChronoGridWrapper_Withdrawn_createMockArgs = {
   readonly user?: Address_t; 
   readonly amount?: bigint; 
@@ -291,6 +299,10 @@ export const ChronoGridWrapper_RelayerUpdated_processEvent: EventFunctions_event
 
 export const ChronoGridWrapper_RelayerUpdated_createMockEvent: (args:ChronoGridWrapper_RelayerUpdated_createMockArgs) => Types_ChronoGridWrapper_RelayerUpdated_event = TestHelpersJS.ChronoGridWrapper.RelayerUpdated.createMockEvent as any;
 
+export const ChronoGridWrapper_UpdatedPnl_processEvent: EventFunctions_eventProcessor<Types_ChronoGridWrapper_UpdatedPnl_event> = TestHelpersJS.ChronoGridWrapper.UpdatedPnl.processEvent as any;
+
+export const ChronoGridWrapper_UpdatedPnl_createMockEvent: (args:ChronoGridWrapper_UpdatedPnl_createMockArgs) => Types_ChronoGridWrapper_UpdatedPnl_event = TestHelpersJS.ChronoGridWrapper.UpdatedPnl.createMockEvent as any;
+
 export const ChronoGridWrapper_Withdrawn_processEvent: EventFunctions_eventProcessor<Types_ChronoGridWrapper_Withdrawn_event> = TestHelpersJS.ChronoGridWrapper.Withdrawn.processEvent as any;
 
 export const ChronoGridWrapper_Withdrawn_createMockEvent: (args:ChronoGridWrapper_Withdrawn_createMockArgs) => Types_ChronoGridWrapper_Withdrawn_event = TestHelpersJS.ChronoGridWrapper.Withdrawn.createMockEvent as any;
@@ -362,6 +374,10 @@ export const ChronoGridWrapper: {
   EIP712DomainChanged: {
     processEvent: EventFunctions_eventProcessor<Types_ChronoGridWrapper_EIP712DomainChanged_event>; 
     createMockEvent: (args:ChronoGridWrapper_EIP712DomainChanged_createMockArgs) => Types_ChronoGridWrapper_EIP712DomainChanged_event
+  }; 
+  UpdatedPnl: {
+    processEvent: EventFunctions_eventProcessor<Types_ChronoGridWrapper_UpdatedPnl_event>; 
+    createMockEvent: (args:ChronoGridWrapper_UpdatedPnl_createMockArgs) => Types_ChronoGridWrapper_UpdatedPnl_event
   }; 
   BetPlacedWithSession: {
     processEvent: EventFunctions_eventProcessor<Types_ChronoGridWrapper_BetPlacedWithSession_event>; 

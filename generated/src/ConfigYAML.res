@@ -72,6 +72,7 @@ let publicConfig = ChainMap.fromArrayUnsafe([
             Types.ChronoGridWrapper.EIP712DomainChanged.name,
             Types.ChronoGridWrapper.FinalBalance.name,
             Types.ChronoGridWrapper.RelayerUpdated.name,
+            Types.ChronoGridWrapper.UpdatedPnl.name,
             Types.ChronoGridWrapper.Withdrawn.name,
           ],
         }

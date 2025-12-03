@@ -269,6 +269,19 @@ CREATE TABLE withdrawn (
 CREATE INDEX idx_withdrawn_user ON withdrawn(user_address);
 CREATE INDEX idx_withdrawn_timestamp ON withdrawn(timestamp DESC);
 
+-- 18. UpdatedPnl
+CREATE TABLE updated_pnl (
+  id BIGSERIAL PRIMARY KEY,
+  event_id TEXT UNIQUE NOT NULL,
+  user_address TEXT NOT NULL,
+  pnl TEXT NOT NULL,
+  block_number BIGINT,
+  timestamp TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX idx_updated_pnl_user ON updated_pnl(user_address);
+CREATE INDEX idx_updated_pnl_timestamp ON updated_pnl(timestamp DESC);
+
 -- Disable Row Level Security for testing (enable in production!)
 ALTER TABLE auto_claim_failed DISABLE ROW LEVEL SECURITY;
 ALTER TABLE auto_claim_skipped DISABLE ROW LEVEL SECURITY;
@@ -287,6 +300,7 @@ ALTER TABLE deposited DISABLE ROW LEVEL SECURITY;
 ALTER TABLE eip712_domain_changed DISABLE ROW LEVEL SECURITY;
 ALTER TABLE relayer_updated DISABLE ROW LEVEL SECURITY;
 ALTER TABLE withdrawn DISABLE ROW LEVEL SECURITY;
+ALTER TABLE updated_pnl DISABLE ROW LEVEL SECURITY;
 
 -- Grant access to authenticated and anon users
 GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, anon, authenticated, service_role;

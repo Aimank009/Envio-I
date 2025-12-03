@@ -15,6 +15,8 @@ import type {ChronoGridWrapper_FinalBalance_t as Entities_ChronoGridWrapper_Fina
 
 import type {ChronoGridWrapper_RelayerUpdated_t as Entities_ChronoGridWrapper_RelayerUpdated_t} from '../src/db/Entities.gen';
 
+import type {ChronoGridWrapper_UpdatedPnl_t as Entities_ChronoGridWrapper_UpdatedPnl_t} from '../src/db/Entities.gen';
+
 import type {ChronoGridWrapper_Withdrawn_t as Entities_ChronoGridWrapper_Withdrawn_t} from '../src/db/Entities.gen';
 
 import type {ChronoGrid_AutoClaimFailed_t as Entities_ChronoGrid_AutoClaimFailed_t} from '../src/db/Entities.gen';
@@ -70,6 +72,7 @@ export type entities = {
   readonly ChronoGridWrapper_EIP712DomainChanged: entityStoreOperations<Entities_ChronoGridWrapper_EIP712DomainChanged_t>; 
   readonly ChronoGridWrapper_FinalBalance: entityStoreOperations<Entities_ChronoGridWrapper_FinalBalance_t>; 
   readonly ChronoGridWrapper_RelayerUpdated: entityStoreOperations<Entities_ChronoGridWrapper_RelayerUpdated_t>; 
+  readonly ChronoGridWrapper_UpdatedPnl: entityStoreOperations<Entities_ChronoGridWrapper_UpdatedPnl_t>; 
   readonly ChronoGridWrapper_Withdrawn: entityStoreOperations<Entities_ChronoGridWrapper_Withdrawn_t>; 
   readonly ChronoGrid_AutoClaimFailed: entityStoreOperations<Entities_ChronoGrid_AutoClaimFailed_t>; 
   readonly ChronoGrid_AutoClaimSkipped: entityStoreOperations<Entities_ChronoGrid_AutoClaimSkipped_t>; 

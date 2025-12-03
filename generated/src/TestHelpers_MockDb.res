@@ -74,6 +74,7 @@ and entities = {
     @as("ChronoGridWrapper_EIP712DomainChanged") chronoGridWrapper_EIP712DomainChanged: entityStoreOperations<Entities.ChronoGridWrapper_EIP712DomainChanged.t>,
     @as("ChronoGridWrapper_FinalBalance") chronoGridWrapper_FinalBalance: entityStoreOperations<Entities.ChronoGridWrapper_FinalBalance.t>,
     @as("ChronoGridWrapper_RelayerUpdated") chronoGridWrapper_RelayerUpdated: entityStoreOperations<Entities.ChronoGridWrapper_RelayerUpdated.t>,
+    @as("ChronoGridWrapper_UpdatedPnl") chronoGridWrapper_UpdatedPnl: entityStoreOperations<Entities.ChronoGridWrapper_UpdatedPnl.t>,
     @as("ChronoGridWrapper_Withdrawn") chronoGridWrapper_Withdrawn: entityStoreOperations<Entities.ChronoGridWrapper_Withdrawn.t>,
     @as("ChronoGrid_AutoClaimFailed") chronoGrid_AutoClaimFailed: entityStoreOperations<Entities.ChronoGrid_AutoClaimFailed.t>,
     @as("ChronoGrid_AutoClaimSkipped") chronoGrid_AutoClaimSkipped: entityStoreOperations<Entities.ChronoGrid_AutoClaimSkipped.t>,
@@ -365,6 +366,20 @@ let rec makeWithInMemoryStore: InMemoryStore.t => t = (inMemoryStore: InMemorySt
           )->(
             Utils.magic: InMemoryTable.Entity.t<Internal.entity> => InMemoryTable.Entity.t<
               Entities.ChronoGridWrapper_RelayerUpdated.t,
+            >
+          ),
+          ~getKey=({id}) => id,
+        )
+      },
+      chronoGridWrapper_UpdatedPnl: {
+        makeStoreOperatorEntity(
+          ~inMemoryStore,
+          ~makeMockDb=makeWithInMemoryStore,
+          ~getStore=db => db->InMemoryStore.getInMemTable(
+            ~entityConfig=module(Entities.ChronoGridWrapper_UpdatedPnl)->Entities.entityModToInternal,
+          )->(
+            Utils.magic: InMemoryTable.Entity.t<Internal.entity> => InMemoryTable.Entity.t<
+              Entities.ChronoGridWrapper_UpdatedPnl.t,
             >
           ),
           ~getKey=({id}) => id,

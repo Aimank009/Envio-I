@@ -164,6 +164,34 @@ export type HandlerContext = {
      */
     readonly deleteUnsafe: (id: string) => void,
   }
+  readonly ChronoGridWrapper_UpdatedPnl: {
+    /**
+     * Load the entity ChronoGridWrapper_UpdatedPnl from the storage by ID.
+     * If the entity is not found, returns undefined.
+     */
+    readonly get: (id: string) => Promise<Entities.ChronoGridWrapper_UpdatedPnl_t | undefined>,
+    /**
+     * Load the entity ChronoGridWrapper_UpdatedPnl from the storage by ID.
+     * If the entity is not found, throws an error.
+     */
+    readonly getOrThrow: (id: string, message?: string) => Promise<Entities.ChronoGridWrapper_UpdatedPnl_t>,
+    readonly getWhere: Entities.ChronoGridWrapper_UpdatedPnl_indexedFieldOperations,
+    /**
+     * Returns the entity ChronoGridWrapper_UpdatedPnl from the storage by ID.
+     * If the entity is not found, creates it using provided parameters and returns it.
+     */
+    readonly getOrCreate: (entity: Entities.ChronoGridWrapper_UpdatedPnl_t) => Promise<Entities.ChronoGridWrapper_UpdatedPnl_t>,
+    /**
+     * Set the entity ChronoGridWrapper_UpdatedPnl in the storage.
+     */
+    readonly set: (entity: Entities.ChronoGridWrapper_UpdatedPnl_t) => void,
+    /**
+     * Delete the entity ChronoGridWrapper_UpdatedPnl from the storage.
+     *
+     * The 'deleteUnsafe' method is experimental and unsafe. You should manually handle all entity references after deletion to maintain database consistency.
+     */
+    readonly deleteUnsafe: (id: string) => void,
+  }
   readonly ChronoGridWrapper_Withdrawn: {
     /**
      * Load the entity ChronoGridWrapper_Withdrawn from the storage by ID.

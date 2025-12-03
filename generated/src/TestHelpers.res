@@ -954,6 +954,44 @@ module ChronoGridWrapper = {
     }
   }
 
+  module UpdatedPnl = {
+    @genType
+    let processEvent: EventFunctions.eventProcessor<Types.ChronoGridWrapper.UpdatedPnl.event> = EventFunctions.makeEventProcessor(
+      ~register=(Types.ChronoGridWrapper.UpdatedPnl.register :> unit => Internal.eventConfig),
+    )
+
+    @genType
+    type createMockArgs = {
+      @as("user")
+      user?: Address.t,
+      @as("pnl")
+      pnl?: bigint,
+      mockEventData?: EventFunctions.mockEventData,
+    }
+
+    @genType
+    let createMockEvent = args => {
+      let {
+        ?user,
+        ?pnl,
+        ?mockEventData,
+      } = args
+
+      let params = 
+      {
+       user: user->Belt.Option.getWithDefault(TestHelpers_MockAddresses.defaultAddress),
+       pnl: pnl->Belt.Option.getWithDefault(0n),
+      }
+->(Utils.magic: Types.ChronoGridWrapper.UpdatedPnl.eventArgs => Internal.eventParams)
+
+      EventFunctions.makeEventMocker(
+        ~params,
+        ~mockEventData,
+        ~register=(Types.ChronoGridWrapper.UpdatedPnl.register :> unit => Internal.eventConfig),
+      )->(Utils.magic: Internal.event => Types.ChronoGridWrapper.UpdatedPnl.event)
+    }
+  }
+
   module Withdrawn = {
     @genType
     let processEvent: EventFunctions.eventProcessor<Types.ChronoGridWrapper.Withdrawn.event> = EventFunctions.makeEventProcessor(

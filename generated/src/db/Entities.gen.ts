@@ -52,6 +52,14 @@ export type ChronoGridWrapper_RelayerUpdated_t = {
 
 export type ChronoGridWrapper_RelayerUpdated_indexedFieldOperations = {};
 
+export type ChronoGridWrapper_UpdatedPnl_t = {
+  readonly id: id; 
+  readonly pnl: bigint; 
+  readonly user: string
+};
+
+export type ChronoGridWrapper_UpdatedPnl_indexedFieldOperations = {};
+
 export type ChronoGridWrapper_Withdrawn_t = {
   readonly amount: bigint; 
   readonly id: id; 

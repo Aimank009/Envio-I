@@ -22,6 +22,7 @@ import {
   ChronoGridWrapper_EIP712DomainChanged,
   ChronoGridWrapper_FinalBalance,
   ChronoGridWrapper_RelayerUpdated,
+  ChronoGridWrapper_UpdatedPnl,
   ChronoGridWrapper_Withdrawn,
 } from "../generated";
 
@@ -46,6 +47,7 @@ import {
   insertEIP712DomainChanged,
   insertFinalBalance,
   insertRelayerUpdated,
+  insertUpdatedPnl,
   insertWithdrawn,
 } from "./supabaseClient";
 
@@ -624,4 +626,29 @@ ChronoGridWrapper.Withdrawn.handler(async ({ event, context }) => {
     blockNumber: event.block.number,
     timestamp: new Date(event.block.timestamp * 1000).toISOString(),
   }).catch(err => console.error('Supabase insert error (Withdrawn):', err.message));
+});
+
+ChronoGridWrapper.UpdatedPnl.handler(async ({ event, context }) => {
+  const entity: ChronoGridWrapper_UpdatedPnl = {
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    user: event.params.user,
+    pnl: event.params.pnl,
+  };
+
+  console.log('📊 UpdatedPnl:', {
+    id: entity.id,
+    user: entity.user,
+    pnl: entity.pnl.toString(),
+  });
+
+  context.ChronoGridWrapper_UpdatedPnl.set(entity);
+
+  // 🚀 Send to Supabase (non-blocking)
+  insertUpdatedPnl({
+    id: entity.id,
+    user: entity.user,
+    pnl: entity.pnl.toString(),
+    blockNumber: event.block.number,
+    timestamp: new Date(event.block.timestamp * 1000).toISOString(),
+  }).catch(err => console.error('Supabase insert error (UpdatedPnl):', err.message));
 });

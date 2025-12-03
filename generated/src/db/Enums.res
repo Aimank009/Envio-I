@@ -20,6 +20,7 @@ module EntityType = {
     | @as("ChronoGridWrapper_EIP712DomainChanged") ChronoGridWrapper_EIP712DomainChanged
     | @as("ChronoGridWrapper_FinalBalance") ChronoGridWrapper_FinalBalance
     | @as("ChronoGridWrapper_RelayerUpdated") ChronoGridWrapper_RelayerUpdated
+    | @as("ChronoGridWrapper_UpdatedPnl") ChronoGridWrapper_UpdatedPnl
     | @as("ChronoGridWrapper_Withdrawn") ChronoGridWrapper_Withdrawn
     | @as("ChronoGrid_AutoClaimFailed") ChronoGrid_AutoClaimFailed
     | @as("ChronoGrid_AutoClaimSkipped") ChronoGrid_AutoClaimSkipped
@@ -43,6 +44,7 @@ module EntityType = {
     ChronoGridWrapper_EIP712DomainChanged,
     ChronoGridWrapper_FinalBalance,
     ChronoGridWrapper_RelayerUpdated,
+    ChronoGridWrapper_UpdatedPnl,
     ChronoGridWrapper_Withdrawn,
     ChronoGrid_AutoClaimFailed,
     ChronoGrid_AutoClaimSkipped,
