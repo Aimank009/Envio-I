@@ -5,6 +5,7 @@ type id = string
 type internalEntity = Internal.entity
 module type Entity = {
   type t
+  let index: int
   let name: string
   let schema: S.t<t>
   let rowsSchema: S.t<array<t>>
@@ -18,15 +19,8 @@ external entitiesToInternal: array<'a> => array<Internal.entity> = "%identity"
 @get
 external getEntityId: internalEntity => string = "id"
 
-exception UnexpectedIdNotDefinedOnEntity
-let getEntityIdUnsafe = (entity: 'entity): id =>
-  switch Utils.magic(entity)["id"] {
-  | Some(id) => id
-  | None =>
-    UnexpectedIdNotDefinedOnEntity->ErrorHandling.mkLogAndRaise(
-      ~msg="Property 'id' does not exist on expected entity object",
-    )
-  }
+// Use InMemoryTable.Entity.getEntityIdUnsafe instead of duplicating the logic
+let getEntityIdUnsafe = InMemoryTable.Entity.getEntityIdUnsafe
 
 //shorthand for punning
 let isPrimaryKey = true
@@ -37,11 +31,13 @@ let isIndex = true
 @genType
 type whereOperations<'entity, 'fieldType> = {
   eq: 'fieldType => promise<array<'entity>>,
-  gt: 'fieldType => promise<array<'entity>>
+  gt: 'fieldType => promise<array<'entity>>,
+  lt: 'fieldType => promise<array<'entity>>
 }
 
 module ChronoGridWrapper_BetPlacedWithSession = {
   let name = (ChronoGridWrapper_BetPlacedWithSession :> string)
+  let index = 0
   @genType
   type t = {
     amount: bigint,
@@ -194,13 +190,14 @@ module ChronoGridWrapper_BetPlacedWithSession = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGridWrapper_Deposited = {
   let name = (ChronoGridWrapper_Deposited :> string)
+  let index = 1
   @genType
   type t = {
     amount: bigint,
@@ -269,13 +266,14 @@ module ChronoGridWrapper_Deposited = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGridWrapper_EIP712DomainChanged = {
   let name = (ChronoGridWrapper_EIP712DomainChanged :> string)
+  let index = 2
   @genType
   type t = {
     id: id,
@@ -308,13 +306,14 @@ module ChronoGridWrapper_EIP712DomainChanged = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGridWrapper_FinalBalance = {
   let name = (ChronoGridWrapper_FinalBalance :> string)
+  let index = 3
   @genType
   type t = {
     id: id,
@@ -371,13 +370,14 @@ module ChronoGridWrapper_FinalBalance = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGridWrapper_RelayerUpdated = {
   let name = (ChronoGridWrapper_RelayerUpdated :> string)
+  let index = 4
   @genType
   type t = {
     id: id,
@@ -434,13 +434,14 @@ module ChronoGridWrapper_RelayerUpdated = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGridWrapper_UpdatedPnl = {
   let name = (ChronoGridWrapper_UpdatedPnl :> string)
+  let index = 5
   @genType
   type t = {
     id: id,
@@ -497,13 +498,14 @@ module ChronoGridWrapper_UpdatedPnl = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGridWrapper_Withdrawn = {
   let name = (ChronoGridWrapper_Withdrawn :> string)
+  let index = 6
   @genType
   type t = {
     amount: bigint,
@@ -572,13 +574,14 @@ module ChronoGridWrapper_Withdrawn = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGrid_AutoClaimFailed = {
   let name = (ChronoGrid_AutoClaimFailed :> string)
+  let index = 7
   @genType
   type t = {
     gridId: string,
@@ -659,13 +662,14 @@ module ChronoGrid_AutoClaimFailed = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGrid_AutoClaimSkipped = {
   let name = (ChronoGrid_AutoClaimSkipped :> string)
+  let index = 8
   @genType
   type t = {
     gridId: string,
@@ -734,13 +738,14 @@ module ChronoGrid_AutoClaimSkipped = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGrid_BetPlaced = {
   let name = (ChronoGrid_BetPlaced :> string)
+  let index = 9
   @genType
   type t = {
     amountPaid: bigint,
@@ -893,13 +898,14 @@ module ChronoGrid_BetPlaced = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGrid_GlobalLiquidityAdded = {
   let name = (ChronoGrid_GlobalLiquidityAdded :> string)
+  let index = 10
   @genType
   type t = {
     amount: bigint,
@@ -956,13 +962,14 @@ module ChronoGrid_GlobalLiquidityAdded = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGrid_GlobalLiquidityUpdated = {
   let name = (ChronoGrid_GlobalLiquidityUpdated :> string)
+  let index = 11
   @genType
   type t = {
     id: id,
@@ -1007,13 +1014,14 @@ module ChronoGrid_GlobalLiquidityUpdated = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGrid_GridCreated = {
   let name = (ChronoGrid_GridCreated :> string)
+  let index = 12
   @genType
   type t = {
     gridId: string,
@@ -1094,13 +1102,14 @@ module ChronoGrid_GridCreated = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGrid_MaxBetAmountUpdated = {
   let name = (ChronoGrid_MaxBetAmountUpdated :> string)
+  let index = 13
   @genType
   type t = {
     id: id,
@@ -1157,13 +1166,14 @@ module ChronoGrid_MaxBetAmountUpdated = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGrid_OwnershipTransferred = {
   let name = (ChronoGrid_OwnershipTransferred :> string)
+  let index = 14
   @genType
   type t = {
     id: id,
@@ -1220,13 +1230,14 @@ module ChronoGrid_OwnershipTransferred = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGrid_TimeperiodCreated = {
   let name = (ChronoGrid_TimeperiodCreated :> string)
+  let index = 15
   @genType
   type t = {
     allocatedLiquidity: bigint,
@@ -1319,13 +1330,14 @@ module ChronoGrid_TimeperiodCreated = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGrid_TimeperiodFinalized = {
   let name = (ChronoGrid_TimeperiodFinalized :> string)
+  let index = 16
   @genType
   type t = {
     id: id,
@@ -1406,13 +1418,14 @@ module ChronoGrid_TimeperiodFinalized = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGrid_TimeperiodSettled = {
   let name = (ChronoGrid_TimeperiodSettled :> string)
+  let index = 17
   @genType
   type t = {
     id: id,
@@ -1517,13 +1530,14 @@ module ChronoGrid_TimeperiodSettled = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGrid_WinningsClaimedEqual = {
   let name = (ChronoGrid_WinningsClaimedEqual :> string)
+  let index = 18
   @genType
   type t = {
     equalShare: bigint,
@@ -1616,13 +1630,14 @@ module ChronoGrid_WinningsClaimedEqual = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }
 
 module ChronoGrid_WrapperSet = {
   let name = (ChronoGrid_WrapperSet :> string)
+  let index = 19
   @genType
   type t = {
     id: id,
@@ -1679,7 +1694,7 @@ module ChronoGrid_WrapperSet = {
     ],
   )
 
-  let entityHistory = table->EntityHistory.fromTable(~schema)
+  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
 
   external castToInternal: t => Internal.entity = "%identity"
 }

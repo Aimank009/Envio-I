@@ -54,57 +54,7 @@ let stateSchema = S.union([
   })),
 ])
 
-// let setApiTokenEnv = {
-//   let initialted = ref(None)
-//   let envPath = NodeJs.Path.resolve([".env"])
-//   async apiToken => {
-//     // Execute once even with multiple calls
-//     if initialted.contents !== Some(apiToken) {
-//       initialted := Some(apiToken)
-
-//       let tokenLine = `ENVIO_API_TOKEN="${apiToken}"`
-
-//       try {
-//         // Check if file exists
-//         let exists = try {
-//           await NodeJs.Fs.Promises.access(envPath)
-//           true
-//         } catch {
-//         | _ => false
-//         }
-
-//         if !exists {
-//           // Create new file if it doesn't exist
-//           await NodeJs.Fs.Promises.writeFile(
-//             ~filepath=envPath,
-//             ~content=tokenLine ++ "\n",
-//             ~options={encoding: "utf8"},
-//           )
-//         } else {
-//           // Read existing file
-//           let content = await NodeJs.Fs.Promises.readFile(~filepath=envPath, ~encoding=Utf8)
-
-//           // Check if token is already set
-//           if !Js.String.includes(content, "ENVIO_API_TOKEN=") {
-//             // Append token line if not present
-//             await NodeJs.Fs.Promises.appendFile(
-//               ~filepath=envPath,
-//               ~content="\n" ++ tokenLine ++ "\n",
-//               ~options={encoding: "utf8"},
-//             )
-//           }
-//         }
-//       } catch {
-//       | Js.Exn.Error(err) => {
-//           Js.Console.error("Error setting up ENVIO_API_TOKEN to the .env file:")
-//           Js.Console.error(err)
-//         }
-//       }
-//     }
-//   }
-// }
-
-let startServer = (~getState, ~config: Config.t, ~shouldUseTui as _) => {
+let startServer = (~getState, ~indexer: Indexer.t, ~isDevelopmentMode: bool) => {
   open Express
 
   let app = makeCjs()
@@ -117,7 +67,10 @@ let startServer = (~getState, ~config: Config.t, ~shouldUseTui as _) => {
     }
 
     res->setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-    res->setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    res->setHeader(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept",
+    )
 
     if req.method === Options {
       res->sendStatus(200)
@@ -135,27 +88,24 @@ let startServer = (~getState, ~config: Config.t, ~shouldUseTui as _) => {
   })
 
   app->get("/console/state", (_req, res) => {
-    res->json(getState()->S.reverseConvertToJsonOrThrow(stateSchema))
+    let state = if isDevelopmentMode {
+      getState()
+    } else {
+      Disabled({})
+    }
+
+    res->json(state->S.reverseConvertToJsonOrThrow(stateSchema))
   })
 
   app->post("/console/syncCache", (_req, res) => {
-    (config.persistence->Persistence.getInitializedStorageOrThrow).dumpEffectCache()
-    ->Promise.thenResolve(_ => res->json(Boolean(true)))
-    ->Promise.done
+    if isDevelopmentMode {
+      (indexer.persistence->Persistence.getInitializedStorageOrThrow).dumpEffectCache()
+      ->Promise.thenResolve(_ => res->json(Boolean(true)))
+      ->Promise.done
+    } else {
+      res->json(Boolean(false))
+    }
   })
-
-  // Keep /console/state exposed, so it can return `disabled` status
-  // if shouldUseTui {
-  //   app->post("/console/api-token", (req, res) => {
-  //     switch req.query->Utils.Dict.dangerouslyGetNonOption("value") {
-  //     | Some(apiToken) if Some(apiToken) !== Env.envioApiToken =>
-  //       setApiTokenEnv(apiToken)->Promise.done
-  //     | _ => ()
-  //     }
-
-  //     res->sendStatus(200)
-  //   })
-  // }
 
   PromClient.collectDefaultMetrics()
 
@@ -251,7 +201,7 @@ let makeAppState = (globalState: GlobalState.t): EnvioInkApp.appState => {
       )
     })
   {
-    config: globalState.config,
+    config: globalState.indexer.config,
     indexerStartTime: globalState.indexerStartTime,
     chains,
   }
@@ -275,8 +225,11 @@ let main = async () => {
   try {
     let mainArgs: mainArgs = process->argv->Yargs.hideBin->Yargs.yargs->Yargs.argv
     let shouldUseTui = !(mainArgs.tuiOff->Belt.Option.getWithDefault(Env.tuiOffEnvVar))
+    // The most simple check to verify whether we are running in development mode
+    // and prevent exposing the console to public, when creating a real deployment.
+    let isDevelopmentMode = Env.Db.password === "testing"
 
-    let config = RegisterHandlers.registerAllHandlers()
+    let indexer = Generated.getIndexer()
 
     let gsManagerRef = ref(None)
 
@@ -287,76 +240,76 @@ let main = async () => {
     | Some(version) => Prometheus.Info.set(~version)
     | None => ()
     }
-    Prometheus.RollbackEnabled.set(~enabled=config.historyConfig.rollbackFlag === RollbackOnReorg)
+    Prometheus.RollbackEnabled.set(~enabled=indexer.config.shouldRollbackOnReorg)
 
     startServer(
-      ~config,
-      ~shouldUseTui,
-      ~getState=if shouldUseTui {
-        () =>
-          switch gsManagerRef.contents {
-          | None => Initializing({})
-          | Some(gsManager) => {
-              let state = gsManager->GlobalStateManager.getState
-              let appState = state->makeAppState
-              Active({
-                envioVersion,
-                chains: appState.chains->Js.Array2.map(c => {
-                  let cf = state.chainManager.chainFetchers->ChainMap.get(c.chain)
-                  {
-                    chainId: c.chain->ChainMap.Chain.toChainId->Js.Int.toFloat,
-                    poweredByHyperSync: c.poweredByHyperSync,
-                    latestFetchedBlockNumber: c.latestFetchedBlockNumber,
-                    currentBlockHeight: c.currentBlockHeight,
-                    numBatchesFetched: c.numBatchesFetched,
-                    endBlock: c.endBlock,
-                    firstEventBlockNumber: switch c.progress {
-                    | SearchingForEvents => None
-                    | Syncing({firstEventBlockNumber}) | Synced({firstEventBlockNumber}) =>
-                      Some(firstEventBlockNumber)
-                    },
-                    latestProcessedBlock: switch c.progress {
-                    | SearchingForEvents => None
-                    | Syncing({latestProcessedBlock}) | Synced({latestProcessedBlock}) =>
-                      Some(latestProcessedBlock)
-                    },
-                    timestampCaughtUpToHeadOrEndblock: switch c.progress {
-                    | SearchingForEvents
-                    | Syncing(_) =>
-                      None
-                    | Synced({timestampCaughtUpToHeadOrEndblock}) =>
-                      Some(timestampCaughtUpToHeadOrEndblock)
-                    },
-                    numEventsProcessed: switch c.progress {
-                    | SearchingForEvents => 0
-                    | Syncing({numEventsProcessed})
-                    | Synced({numEventsProcessed}) => numEventsProcessed
-                    },
-                    numAddresses: cf.fetchState->FetchState.numAddresses,
-                  }
-                }),
-                indexerStartTime: appState.indexerStartTime,
-                isPreRegisteringDynamicContracts: false,
-                rollbackOnReorg: config.historyConfig.rollbackFlag === RollbackOnReorg,
-                isUnorderedMultichainMode: switch config.multichain {
-                | Unordered => true
-                | Ordered => false
-                },
-              })
-            }
+      ~indexer,
+      ~isDevelopmentMode,
+      ~getState=() =>
+        switch gsManagerRef.contents {
+        | None => Initializing({})
+        | Some(gsManager) => {
+            let state = gsManager->GlobalStateManager.getState
+            let appState = state->makeAppState
+            Active({
+              envioVersion,
+              chains: appState.chains->Js.Array2.map(c => {
+                let cf = state.chainManager.chainFetchers->ChainMap.get(c.chain)
+                {
+                  chainId: c.chain->ChainMap.Chain.toChainId->Js.Int.toFloat,
+                  poweredByHyperSync: c.poweredByHyperSync,
+                  latestFetchedBlockNumber: c.latestFetchedBlockNumber,
+                  currentBlockHeight: c.currentBlockHeight,
+                  numBatchesFetched: c.numBatchesFetched,
+                  endBlock: c.endBlock,
+                  firstEventBlockNumber: switch c.progress {
+                  | SearchingForEvents => None
+                  | Syncing({firstEventBlockNumber}) | Synced({firstEventBlockNumber}) =>
+                    Some(firstEventBlockNumber)
+                  },
+                  latestProcessedBlock: switch c.progress {
+                  | SearchingForEvents => None
+                  | Syncing({latestProcessedBlock}) | Synced({latestProcessedBlock}) =>
+                    Some(latestProcessedBlock)
+                  },
+                  timestampCaughtUpToHeadOrEndblock: switch c.progress {
+                  | SearchingForEvents
+                  | Syncing(_) =>
+                    None
+                  | Synced({timestampCaughtUpToHeadOrEndblock}) =>
+                    Some(timestampCaughtUpToHeadOrEndblock)
+                  },
+                  numEventsProcessed: switch c.progress {
+                  | SearchingForEvents => 0
+                  | Syncing({numEventsProcessed})
+                  | Synced({numEventsProcessed}) => numEventsProcessed
+                  },
+                  numAddresses: cf.fetchState->FetchState.numAddresses,
+                }
+              }),
+              indexerStartTime: appState.indexerStartTime,
+              isPreRegisteringDynamicContracts: false,
+              rollbackOnReorg: indexer.config.shouldRollbackOnReorg,
+              isUnorderedMultichainMode: switch indexer.config.multichain {
+              | Unordered => true
+              | Ordered => false
+              },
+            })
           }
-      } else {
-        () => Disabled({})
-      },
+        },
     )
 
-    await config.persistence->Persistence.init(~chainConfigs=config.chainMap->ChainMap.values)
+    await indexer.persistence->Persistence.init(
+      ~chainConfigs=indexer.config.chainMap->ChainMap.values,
+    )
 
     let chainManager = await ChainManager.makeFromDbState(
-      ~initialState=config.persistence->Persistence.getInitializedState,
-      ~config,
+      ~initialState=indexer.persistence->Persistence.getInitializedState,
+      ~config=indexer.config,
+      ~registrations=indexer.registrations,
+      ~persistence=indexer.persistence,
     )
-    let globalState = GlobalState.make(~config, ~chainManager, ~shouldUseTui)
+    let globalState = GlobalState.make(~indexer, ~chainManager, ~isDevelopmentMode, ~shouldUseTui)
     let stateUpdatedHook = if shouldUseTui {
       let rerender = EnvioInkApp.startApp(makeAppState(globalState))
       Some(globalState => globalState->makeAppState->rerender)

@@ -1,66 +1,71 @@
 let codegenHelpMessage = `Rerun 'pnpm dev' to update generated code after schema.graphql changes.`
 
-let makeEventIdentifier = (item: Internal.item): Types.eventIdentifier => {
-  switch item {
-  | Internal.Event({chain, blockNumber, logIndex, timestamp}) => {
-      chainId: chain->ChainMap.Chain.toChainId,
-      blockTimestamp: timestamp,
-      blockNumber,
-      logIndex,
-    }
-  | Internal.Block({onBlockConfig: {chainId}, blockNumber, logIndex}) => {
-      chainId,
-      blockTimestamp: 0,
-      blockNumber,
-      logIndex,
-    }
-  }
-}
-
 type contextParams = {
   item: Internal.item,
+  checkpointId: int,
   inMemoryStore: InMemoryStore.t,
   loadManager: LoadManager.t,
   persistence: Persistence.t,
   isPreload: bool,
   shouldSaveHistory: bool,
+  chains: Internal.chains,
+  mutable isResolved: bool,
 }
 
-let rec initEffect = (params: contextParams) => (
-  effect: Internal.effect,
-  input: Internal.effectInput,
-) =>
-  LoadLayer.loadEffect(
-    ~loadManager=params.loadManager,
-    ~persistence=params.persistence,
-    ~effect,
-    ~effectArgs={
-      input,
-      context: params->Utils.Proxy.make(effectTraps)->Utils.magic,
-      cacheKey: input->S.reverseConvertOrThrow(effect.input)->Utils.Hash.makeOrThrow,
-    },
-    ~inMemoryStore=params.inMemoryStore,
-    ~shouldGroup=params.isPreload,
-    ~item=params.item,
-  )
-and effectTraps: Utils.Proxy.traps<contextParams> = {
-  get: (~target as params, ~prop: unknown) => {
-    let prop = prop->(Utils.magic: unknown => string)
-    switch prop {
-    | "log" => params.item->Logging.getUserLogger->Utils.magic
-    | "effect" =>
-      initEffect(params)->(
-        Utils.magic: (
-          (Internal.effect, Internal.effectInput) => promise<Internal.effectOutput>
-        ) => unknown
-      )
+// We don't want to expose the params to the user
+// so instead of storing _params on the context object,
+// we use an external WeakMap
+let paramsByThis: Utils.WeakMap.t<unknown, contextParams> = Utils.WeakMap.make()
 
-    | _ =>
-      Js.Exn.raiseError(
-        `Invalid context access by '${prop}' property. Effect context doesn't allow access to storage.`,
-      )
-    }
+let effectContextPrototype = %raw(`Object.create(null)`)
+Utils.Object.defineProperty(
+  effectContextPrototype,
+  "log",
+  {
+    get: () => {
+      (paramsByThis->Utils.WeakMap.unsafeGet(%raw(`this`))).item->Logging.getUserLogger
+    },
   },
+)
+%%raw(`
+var EffectContext = function(params, defaultShouldCache, callEffect) {
+  paramsByThis.set(this, params);
+  this.effect = callEffect;
+  this.cache = defaultShouldCache;
+};
+EffectContext.prototype = effectContextPrototype;
+`)
+
+@new
+external makeEffectContext: (
+  contextParams,
+  ~defaultShouldCache: bool,
+  ~callEffect: (Internal.effect, Internal.effectInput) => promise<Internal.effectOutput>,
+) => Internal.effectContext = "EffectContext"
+
+let initEffect = (params: contextParams) => {
+  let rec callEffect = (effect: Internal.effect, input: Internal.effectInput) => {
+    let effectContext = makeEffectContext(
+      params,
+      ~defaultShouldCache=effect.defaultShouldCache,
+      ~callEffect,
+    )
+    let effectArgs: Internal.effectArgs = {
+      input,
+      context: effectContext,
+      cacheKey: input->S.reverseConvertOrThrow(effect.input)->Utils.Hash.makeOrThrow,
+    }
+    LoadLayer.loadEffect(
+      ~loadManager=params.loadManager,
+      ~persistence=params.persistence,
+      ~effect,
+      ~effectArgs,
+      ~inMemoryStore=params.inMemoryStore,
+      ~shouldGroup=params.isPreload,
+      ~item=params.item,
+    )
+  }
+  callEffect
 }
 
 type entityContextParams = {
@@ -114,6 +119,19 @@ let getWhereTraps: Utils.Proxy.traps<entityContextParams> = {
               ~item=params.item,
               ~fieldValue,
             ),
+          lt: fieldValue =>
+            LoadLayer.loadByField(
+              ~loadManager=params.loadManager,
+              ~persistence=params.persistence,
+              ~operator=Lt,
+              ~entityConfig,
+              ~fieldName=dbFieldName,
+              ~fieldValueSchema,
+              ~inMemoryStore=params.inMemoryStore,
+              ~shouldGroup=params.isPreload,
+              ~item=params.item,
+              ~fieldValue,
+            ),
         }->Utils.magic
       }
     }
@@ -133,10 +151,11 @@ let entityTraps: Utils.Proxy.traps<entityContextParams> = {
           params.inMemoryStore
           ->InMemoryStore.getInMemTable(~entityConfig=params.entityConfig)
           ->InMemoryTable.Entity.set(
-            Set(entity)->Types.mkEntityUpdate(
-              ~eventIdentifier=params.item->makeEventIdentifier,
-              ~entityId=entity.id,
-            ),
+            {
+              entityId: entity.id,
+              checkpointId: params.checkpointId,
+              entityUpdateAction: Set(entity),
+            },
             ~shouldSaveHistory=params.shouldSaveHistory,
           )
         }
@@ -209,10 +228,11 @@ let entityTraps: Utils.Proxy.traps<entityContextParams> = {
           params.inMemoryStore
           ->InMemoryStore.getInMemTable(~entityConfig=params.entityConfig)
           ->InMemoryTable.Entity.set(
-            Delete->Types.mkEntityUpdate(
-              ~eventIdentifier=params.item->makeEventIdentifier,
-              ~entityId,
-            ),
+            {
+              entityId,
+              checkpointId: params.checkpointId,
+              entityUpdateAction: Delete,
+            },
             ~shouldSaveHistory=params.shouldSaveHistory,
           )
         }
@@ -225,6 +245,11 @@ let entityTraps: Utils.Proxy.traps<entityContextParams> = {
 let handlerTraps: Utils.Proxy.traps<contextParams> = {
   get: (~target as params, ~prop: unknown) => {
     let prop = prop->(Utils.magic: unknown => string)
+    if params.isResolved {
+      Utils.Error.make(
+        `Impossible to access context.${prop} after the handler is resolved. Make sure you didn't miss an await in the handler.`,
+      )->ErrorHandling.mkLogAndRaise(~logger=params.item->Logging.getItemLogger)
+    }
     switch prop {
     | "log" =>
       (params.isPreload ? Logging.noopLogger : params.item->Logging.getUserLogger)->Utils.magic
@@ -236,6 +261,7 @@ let handlerTraps: Utils.Proxy.traps<contextParams> = {
       )
 
     | "isPreload" => params.isPreload->Utils.magic
+    | "chains" => params.chains->Utils.magic
     | _ =>
       switch Entities.byName->Utils.Dict.dangerouslyGetNonOption(prop) {
       | Some(entityConfig) =>
@@ -246,6 +272,9 @@ let handlerTraps: Utils.Proxy.traps<contextParams> = {
           loadManager: params.loadManager,
           persistence: params.persistence,
           shouldSaveHistory: params.shouldSaveHistory,
+          checkpointId: params.checkpointId,
+          chains: params.chains,
+          isResolved: params.isResolved,
           entityConfig,
         }
         ->Utils.Proxy.make(entityTraps)
@@ -270,12 +299,17 @@ type contractRegisterParams = {
     ~contractName: Enums.ContractType.t,
   ) => unit,
   config: Config.t,
+  mutable isResolved: bool,
 }
 
 let contractRegisterTraps: Utils.Proxy.traps<contractRegisterParams> = {
   get: (~target as params, ~prop: unknown) => {
     let prop = prop->(Utils.magic: unknown => string)
-
+    if params.isResolved {
+      Utils.Error.make(
+        `Impossible to access context.${prop} after the contract register is resolved. Make sure you didn't miss an await in the handler.`,
+      )->ErrorHandling.mkLogAndRaise(~logger=params.item->Logging.getItemLogger)
+    }
     switch prop {
     | "log" => params.item->Logging.getUserLogger->Utils.magic
     | _ =>
@@ -314,22 +348,13 @@ let contractRegisterTraps: Utils.Proxy.traps<contractRegisterParams> = {
   },
 }
 
-let getContractRegisterContext = (~item, ~onRegister, ~config: Config.t) => {
-  {
-    item,
-    onRegister,
-    config,
-  }
+let getContractRegisterContext = (params: contractRegisterParams) => {
+  params
   ->Utils.Proxy.make(contractRegisterTraps)
   ->Utils.magic
 }
 
-let getContractRegisterArgs = (
-  item: Internal.item,
-  ~eventItem: Internal.eventItem,
-  ~onRegister,
-  ~config: Config.t,
-): Internal.contractRegisterArgs => {
-  event: eventItem.event,
-  context: getContractRegisterContext(~item, ~onRegister, ~config),
+let getContractRegisterArgs = (params: contractRegisterParams): Internal.contractRegisterArgs => {
+  event: (params.item->Internal.castUnsafeEventItem).event,
+  context: getContractRegisterContext(params),
 }

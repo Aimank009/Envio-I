@@ -11,9 +11,20 @@ module type State = {
 }
 
 module MakeManager = (S: State) => {
-  type t = {mutable state: S.t, stateUpdatedHook: option<S.t => unit>}
+  type t = {mutable state: S.t, stateUpdatedHook: option<S.t => unit>, onError: exn => unit}
 
-  let make = (~stateUpdatedHook: option<S.t => unit>=?, state: S.t) => {state, stateUpdatedHook}
+  let make = (
+    state: S.t,
+    ~stateUpdatedHook: option<S.t => unit>=?,
+    ~onError=e => {
+      e->ErrorHandling.make(~msg="Indexer has failed with an unexpected error")->ErrorHandling.log
+      NodeJs.process->NodeJs.exitWithCode(Failure)
+    },
+  ) => {
+    state,
+    stateUpdatedHook,
+    onError,
+  }
 
   let rec dispatchAction = (~stateId=0, self: t, action: S.action) => {
     try {
@@ -32,9 +43,7 @@ module MakeManager = (S: State) => {
       self.state = nextState
       nextTasks->Array.forEach(task => dispatchTask(self, task))
     } catch {
-    | e =>
-      e->ErrorHandling.make(~msg="Indexer has failed with an unxpected error")->ErrorHandling.log
-      NodeJs.process->NodeJs.exitWithCode(Failure)
+    | e => e->self.onError
     }
   }
   and dispatchTask = (self, task: S.task) => {
@@ -43,9 +52,18 @@ module MakeManager = (S: State) => {
       if stateId !== self.state->S.getId {
         Logging.info("Invalidated task discarded")
       } else {
-        S.taskReducer(self.state, task, ~dispatchAction=action =>
-          dispatchAction(~stateId, self, action)
-        )->ignore
+        try {
+          S.taskReducer(self.state, task, ~dispatchAction=action =>
+            dispatchAction(~stateId, self, action)
+          )
+          ->Promise.catch(e => {
+            e->self.onError
+            Promise.resolve()
+          })
+          ->ignore
+        } catch {
+        | e => e->self.onError
+        }
       }
     }, 0)->ignore
   }

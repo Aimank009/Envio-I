@@ -6,6 +6,26 @@ let allChainsEventsProcessedToEndblock = (chainFetchers: ChainMap.t<ChainFetcher
   ->Array.every(cf => cf->ChainFetcher.hasProcessedToEndblock)
 }
 
+let computeChainsState = (chainFetchers: ChainMap.t<ChainFetcher.t>): Internal.chains => {
+  let chains = Js.Dict.empty()
+
+  chainFetchers
+  ->ChainMap.entries
+  ->Array.forEach(((chain, chainFetcher)) => {
+    let chainId = chain->ChainMap.Chain.toChainId->Int.toString
+    let isReady = chainFetcher.timestampCaughtUpToHeadOrEndblock !== None
+
+    chains->Js.Dict.set(
+      chainId,
+      {
+        Internal.isReady: isReady,
+      },
+    )
+  })
+
+  chains
+}
+
 let convertFieldsToJson = (fields: option<dict<unknown>>) => {
   switch fields {
   | None => %raw(`{}`)
@@ -81,12 +101,14 @@ exception ProcessingError({message: string, exn: exn, item: Internal.item})
 
 let runEventHandlerOrThrow = async (
   item: Internal.item,
+  ~checkpointId,
   ~handler,
   ~inMemoryStore,
   ~loadManager,
   ~persistence,
   ~shouldSaveHistory,
   ~shouldBenchmark,
+  ~chains: Internal.chains,
 ) => {
   let eventItem = item->Internal.castUnsafeEventItem
 
@@ -94,21 +116,26 @@ let runEventHandlerOrThrow = async (
   let timeBeforeHandler = Hrtime.makeTimer()
 
   try {
+    let contextParams: UserContext.contextParams = {
+      item,
+      checkpointId,
+      inMemoryStore,
+      loadManager,
+      persistence,
+      shouldSaveHistory,
+      isPreload: false,
+      chains,
+      isResolved: false,
+    }
     await handler(
       (
         {
           event: eventItem.event,
-          context: UserContext.getHandlerContext({
-            item,
-            inMemoryStore,
-            loadManager,
-            persistence,
-            shouldSaveHistory,
-            isPreload: false,
-          }),
+          context: UserContext.getHandlerContext(contextParams),
         }: Internal.handlerArgs
       ),
     )
+    contextParams.isResolved = true
   } catch {
   | exn =>
     raise(
@@ -132,15 +159,28 @@ let runEventHandlerOrThrow = async (
 
 let runHandlerOrThrow = async (
   item: Internal.item,
+  ~checkpointId,
   ~inMemoryStore,
   ~loadManager,
-  ~config: Config.t,
+  ~indexer: Indexer.t,
   ~shouldSaveHistory,
   ~shouldBenchmark,
+  ~chains: Internal.chains,
 ) => {
   switch item {
   | Block({onBlockConfig: {handler, chainId}, blockNumber}) =>
     try {
+      let contextParams: UserContext.contextParams = {
+        item,
+        inMemoryStore,
+        loadManager,
+        persistence: indexer.persistence,
+        shouldSaveHistory,
+        checkpointId,
+        isPreload: false,
+        chains,
+        isResolved: false,
+      }
       await handler(
         (
           {
@@ -148,22 +188,16 @@ let runHandlerOrThrow = async (
               number: blockNumber,
               chainId,
             },
-            context: UserContext.getHandlerContext({
-              item,
-              inMemoryStore,
-              loadManager,
-              persistence: config.persistence,
-              shouldSaveHistory,
-              isPreload: false,
-            }),
+            context: UserContext.getHandlerContext(contextParams),
           }: Internal.onBlockArgs
         ),
       )
+      contextParams.isResolved = true
     } catch {
     | exn =>
       raise(
         ProcessingError({
-          message: "Unexpected error in the event handler. Please handle the error to keep the indexer running smoothly.",
+          message: "Unexpected error in the block handler. Please handle the error to keep the indexer running smoothly.",
           item,
           exn,
         }),
@@ -174,16 +208,18 @@ let runHandlerOrThrow = async (
       | Some(handler) =>
         await item->runEventHandlerOrThrow(
           ~handler,
+          ~checkpointId,
           ~inMemoryStore,
           ~loadManager,
-          ~persistence=config.persistence,
+          ~persistence=indexer.persistence,
           ~shouldSaveHistory,
           ~shouldBenchmark,
+          ~chains,
         )
       | None => ()
       }
 
-      if config.enableRawEvents {
+      if indexer.config.enableRawEvents {
         item->Internal.castUnsafeEventItem->addItemToRawEvents(~inMemoryStore)
       }
     }
@@ -191,24 +227,34 @@ let runHandlerOrThrow = async (
 }
 
 let preloadBatchOrThrow = async (
-  eventBatch: array<Internal.item>,
+  batch: Batch.t,
   ~loadManager,
   ~persistence,
   ~inMemoryStore,
+  ~chains: Internal.chains,
 ) => {
   // On the first run of loaders, we don't care about the result,
   // whether it's an error or a return type.
   // We'll rerun the loader again right before the handler run,
   // to avoid having a stale data returned from the loader.
-  let _ = await Promise.all(
-    eventBatch->Array.keepMap(item => {
+
+  let promises = []
+  let itemIdx = ref(0)
+
+  for checkpointIdx in 0 to batch.checkpointIds->Array.length - 1 {
+    let checkpointId = batch.checkpointIds->Js.Array2.unsafe_get(checkpointIdx)
+    let checkpointEventsProcessed =
+      batch.checkpointEventsProcessed->Js.Array2.unsafe_get(checkpointIdx)
+
+    for idx in 0 to checkpointEventsProcessed - 1 {
+      let item = batch.items->Js.Array2.unsafe_get(itemIdx.contents + idx)
       switch item {
       | Event({eventConfig: {handler}, event}) =>
         switch handler {
-        | None => None
+        | None => ()
         | Some(handler) =>
           try {
-            Some(
+            promises->Array.push(
               handler({
                 event,
                 context: UserContext.getHandlerContext({
@@ -216,8 +262,11 @@ let preloadBatchOrThrow = async (
                   inMemoryStore,
                   loadManager,
                   persistence,
+                  checkpointId,
                   isPreload: true,
                   shouldSaveHistory: false,
+                  chains,
+                  isResolved: false,
                 }),
               })->Promise.silentCatch,
               // Must have Promise.catch as well as normal catch,
@@ -225,12 +274,12 @@ let preloadBatchOrThrow = async (
               // it won't create a rejected promise
             )
           } catch {
-          | _ => None
+          | _ => ()
           }
         }
       | Block({onBlockConfig: {handler, chainId}, blockNumber}) =>
         try {
-          Some(
+          promises->Array.push(
             handler({
               block: {
                 number: blockNumber,
@@ -241,37 +290,57 @@ let preloadBatchOrThrow = async (
                 inMemoryStore,
                 loadManager,
                 persistence,
+                checkpointId,
                 isPreload: true,
                 shouldSaveHistory: false,
+                chains,
+                isResolved: false,
               }),
             })->Promise.silentCatch,
           )
         } catch {
-        | _ => None
+        | _ => ()
         }
       }
-    }),
-  )
+    }
+
+    itemIdx := itemIdx.contents + checkpointEventsProcessed
+  }
+
+  let _ = await Promise.all(promises)
 }
 
 let runBatchHandlersOrThrow = async (
-  eventBatch: array<Internal.item>,
+  batch: Batch.t,
   ~inMemoryStore,
   ~loadManager,
-  ~config,
+  ~indexer,
   ~shouldSaveHistory,
   ~shouldBenchmark,
+  ~chains: Internal.chains,
 ) => {
-  for i in 0 to eventBatch->Array.length - 1 {
-    let item = eventBatch->Js.Array2.unsafe_get(i)
-    await runHandlerOrThrow(
-      item,
-      ~inMemoryStore,
-      ~loadManager,
-      ~config,
-      ~shouldSaveHistory,
-      ~shouldBenchmark,
-    )
+  let itemIdx = ref(0)
+
+  for checkpointIdx in 0 to batch.checkpointIds->Array.length - 1 {
+    let checkpointId = batch.checkpointIds->Js.Array2.unsafe_get(checkpointIdx)
+    let checkpointEventsProcessed =
+      batch.checkpointEventsProcessed->Js.Array2.unsafe_get(checkpointIdx)
+
+    for idx in 0 to checkpointEventsProcessed - 1 {
+      let item = batch.items->Js.Array2.unsafe_get(itemIdx.contents + idx)
+
+      await runHandlerOrThrow(
+        item,
+        ~checkpointId,
+        ~inMemoryStore,
+        ~loadManager,
+        ~indexer,
+        ~shouldSaveHistory,
+        ~shouldBenchmark,
+        ~chains,
+      )
+    }
+    itemIdx := itemIdx.contents + checkpointEventsProcessed
   }
 }
 
@@ -301,59 +370,63 @@ type logPartitionInfo = {
 }
 
 let processEventBatch = async (
-  ~items: array<Internal.item>,
-  ~progressedChains: array<Batch.progressedChain>,
+  ~batch: Batch.t,
   ~inMemoryStore: InMemoryStore.t,
   ~isInReorgThreshold,
   ~loadManager,
-  ~config: Config.t,
+  ~indexer: Indexer.t,
+  ~chainFetchers: ChainMap.t<ChainFetcher.t>,
 ) => {
-  let batchSize = items->Array.length
-  let byChain = Js.Dict.empty()
-  progressedChains->Js.Array2.forEach(data => {
-    if data.batchSize > 0 {
-      byChain->Utils.Dict.setByInt(
-        data.chainId,
-        {
-          "batchSize": data.batchSize,
-          "toBlockNumber": data.progressBlockNumber,
-        },
-      )
-    }
+  let totalBatchSize = batch.totalBatchSize
+  // Compute chains state for this batch
+  let chains: Internal.chains = chainFetchers->computeChainsState
+
+  let logger = Logging.getLogger()
+  logger->Logging.childTrace({
+    "msg": "Started processing batch",
+    "totalBatchSize": totalBatchSize,
+    "chains": batch.progressedChainsById->Utils.Dict.mapValues(chainAfterBatch => {
+      {
+        "batchSize": chainAfterBatch.batchSize,
+        "progress": chainAfterBatch.progressBlockNumber,
+      }
+    }),
   })
-  let logger = Logging.createChildFrom(
-    ~logger=Logging.getLogger(),
-    ~params={
-      "totalBatchSize": batchSize,
-      "byChain": byChain,
-    },
-  )
-  logger->Logging.childTrace("Started processing batch")
 
   try {
     let timeRef = Hrtime.makeTimer()
 
-    await items->preloadBatchOrThrow(~loadManager, ~persistence=config.persistence, ~inMemoryStore)
+    if batch.items->Utils.Array.notEmpty {
+      await batch->preloadBatchOrThrow(
+        ~loadManager,
+        ~persistence=indexer.persistence,
+        ~inMemoryStore,
+        ~chains,
+      )
+    }
 
     let elapsedTimeAfterLoaders = timeRef->Hrtime.timeSince->Hrtime.toMillis->Hrtime.intFromMillis
 
-    await items->runBatchHandlersOrThrow(
-      ~inMemoryStore,
-      ~loadManager,
-      ~config,
-      ~shouldSaveHistory=config->Config.shouldSaveHistory(~isInReorgThreshold),
-      ~shouldBenchmark=Env.Benchmark.shouldSaveData,
-    )
+    if batch.items->Utils.Array.notEmpty {
+      await batch->runBatchHandlersOrThrow(
+        ~inMemoryStore,
+        ~loadManager,
+        ~indexer,
+        ~shouldSaveHistory=indexer.config->Config.shouldSaveHistory(~isInReorgThreshold),
+        ~shouldBenchmark=Env.Benchmark.shouldSaveData,
+        ~chains,
+      )
+    }
 
     let elapsedTimeAfterProcessing =
       timeRef->Hrtime.timeSince->Hrtime.toMillis->Hrtime.intFromMillis
 
     let rec executeBatch = async (~escapeTables=?) => {
-      switch await Db.sql->IO.executeBatch(
-        ~progressedChains,
+      switch await indexer.persistence.sql->IO.executeBatch(
+        ~batch,
         ~inMemoryStore,
         ~isInReorgThreshold,
-        ~config,
+        ~indexer,
         ~escapeTables?,
       ) {
       | exception Persistence.StorageError({message, reason}) =>
@@ -383,7 +456,7 @@ let processEventBatch = async (
           )
           if Env.Benchmark.shouldSaveData {
             Benchmark.addEventProcessing(
-              ~batchSize,
+              ~batchSize=totalBatchSize,
               ~loadDuration=loaderDuration,
               ~handlerDuration,
               ~dbWriteDuration,

@@ -5,7 +5,11 @@
 
 export type id = string;
 
-export type whereOperations<entity,fieldType> = { readonly eq: (_1:fieldType) => Promise<entity[]>; readonly gt: (_1:fieldType) => Promise<entity[]> };
+export type whereOperations<entity,fieldType> = {
+  readonly eq: (_1:fieldType) => Promise<entity[]>; 
+  readonly gt: (_1:fieldType) => Promise<entity[]>; 
+  readonly lt: (_1:fieldType) => Promise<entity[]>
+};
 
 export type ChronoGridWrapper_BetPlacedWithSession_t = {
   readonly amount: bigint; 

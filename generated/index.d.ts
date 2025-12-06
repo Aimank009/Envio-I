@@ -8,14 +8,14 @@ import {
   ChronoGrid,
   ChronoGridWrapper,
   MockDb,
-  Addresses 
+  Addresses
 } from "./src/TestHelpers.gen";
 
 export const TestHelpers = {
   ChronoGrid,
   ChronoGridWrapper,
   MockDb,
-  Addresses 
+  Addresses
 };
 
 export {

@@ -27,6 +27,7 @@ type handlerContext = {
   log: Envio.logger,
   effect: 'input 'output. (Envio.effect<'input, 'output>, 'input) => promise<'output>,
   isPreload: bool,
+  chains: Internal.chains,
   @as("ChronoGridWrapper_BetPlacedWithSession") chronoGridWrapper_BetPlacedWithSession: entityHandlerContext<Entities.ChronoGridWrapper_BetPlacedWithSession.t, Entities.ChronoGridWrapper_BetPlacedWithSession.indexedFieldOperations>,
   @as("ChronoGridWrapper_Deposited") chronoGridWrapper_Deposited: entityHandlerContext<Entities.ChronoGridWrapper_Deposited.t, Entities.ChronoGridWrapper_Deposited.indexedFieldOperations>,
   @as("ChronoGridWrapper_EIP712DomainChanged") chronoGridWrapper_EIP712DomainChanged: entityHandlerContext<Entities.ChronoGridWrapper_EIP712DomainChanged.t, Entities.ChronoGridWrapper_EIP712DomainChanged.indexedFieldOperations>,
@@ -90,51 +91,6 @@ type chronoGrid_TimeperiodSettled = Entities.ChronoGrid_TimeperiodSettled.t
 type chronoGrid_WinningsClaimedEqual = Entities.ChronoGrid_WinningsClaimedEqual.t
 @genType.as("ChronoGrid_WrapperSet")
 type chronoGrid_WrapperSet = Entities.ChronoGrid_WrapperSet.t
-
-type eventIdentifier = {
-  chainId: int,
-  blockTimestamp: int,
-  blockNumber: int,
-  logIndex: int,
-}
-
-type entityUpdateAction<'entityType> =
-  | Set('entityType)
-  | Delete
-
-type entityUpdate<'entityType> = {
-  eventIdentifier: eventIdentifier,
-  entityId: id,
-  entityUpdateAction: entityUpdateAction<'entityType>,
-}
-
-let mkEntityUpdate = (~eventIdentifier, ~entityId, entityUpdateAction) => {
-  entityId,
-  eventIdentifier,
-  entityUpdateAction,
-}
-
-type entityValueAtStartOfBatch<'entityType> =
-  | NotSet // The entity isn't in the DB yet
-  | AlreadySet('entityType)
-
-type updatedValue<'entityType> = {
-  latest: entityUpdate<'entityType>,
-  history: array<entityUpdate<'entityType>>,
-  // In the event of a rollback, some entity updates may have been
-  // been affected by a rollback diff. If there was no rollback diff
-  // this will always be false.
-  // If there was a rollback diff, this will be false in the case of a
-  // new entity update (where entity affected is not present in the diff) b
-  // but true if the update is related to an entity that is
-  // currently present in the diff
-  containsRollbackDiffChange: bool,
-}
-
-@genType
-type inMemoryStoreRowEntity<'entityType> =
-  | Updated(updatedValue<'entityType>)
-  | InitialReadFromDb(entityValueAtStartOfBatch<'entityType>) // This means there is no change from the db.
 
 //*************
 //**CONTRACTS**

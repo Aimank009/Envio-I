@@ -147,35 +147,6 @@ export type ChronoGrid_WinningsClaimedEqual = chronoGrid_WinningsClaimedEqual;
 export type chronoGrid_WrapperSet = Entities_ChronoGrid_WrapperSet_t;
 export type ChronoGrid_WrapperSet = chronoGrid_WrapperSet;
 
-export type eventIdentifier = {
-  readonly chainId: number; 
-  readonly blockTimestamp: number; 
-  readonly blockNumber: number; 
-  readonly logIndex: number
-};
-
-export type entityUpdateAction<entityType> = "Delete" | { TAG: "Set"; _0: entityType };
-
-export type entityUpdate<entityType> = {
-  readonly eventIdentifier: eventIdentifier; 
-  readonly entityId: id; 
-  readonly entityUpdateAction: entityUpdateAction<entityType>
-};
-
-export type entityValueAtStartOfBatch<entityType> = 
-    "NotSet"
-  | { TAG: "AlreadySet"; _0: entityType };
-
-export type updatedValue<entityType> = {
-  readonly latest: entityUpdate<entityType>; 
-  readonly history: entityUpdate<entityType>[]; 
-  readonly containsRollbackDiffChange: boolean
-};
-
-export type inMemoryStoreRowEntity<entityType> = 
-    { TAG: "Updated"; _0: updatedValue<entityType> }
-  | { TAG: "InitialReadFromDb"; _0: entityValueAtStartOfBatch<entityType> };
-
 export type Transaction_t = {};
 
 export type Block_t = {

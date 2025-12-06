@@ -24,6 +24,17 @@ export type HandlerContext = {
    * After preload the handler will run for the second time in sequential order of events.
    */
   readonly isPreload: boolean;
+  /**
+   * Per-chain state information accessible in event handlers and block handlers.
+   * Each chain ID maps to an object containing chain-specific state:
+   * - isReady: true when the chain has completed initial sync and is processing live events,
+   *            false during historical synchronization
+   */
+  readonly chains: {
+    [chainId: string]: {
+      readonly isReady: boolean;
+    };
+  };
   readonly ChronoGridWrapper_BetPlacedWithSession: {
     /**
      * Load the entity ChronoGridWrapper_BetPlacedWithSession from the storage by ID.

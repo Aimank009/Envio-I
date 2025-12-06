@@ -51,7 +51,7 @@ import type {RawEvents_t as InternalTable_RawEvents_t} from 'envio/src/db/Intern
 
 import type {eventLog as Types_eventLog} from './Types.gen';
 
-import type {rawEventsKey as InMemoryStore_rawEventsKey} from './InMemoryStore.gen';
+import type {rawEventsKey as InMemoryStore_rawEventsKey} from 'envio/src/InMemoryStore.gen';
 
 /** The mockDb type is simply an InMemoryStore internally. __dbInternal__ holds a reference
 to an inMemoryStore and all the the accessor methods point to the reference of that inMemory
