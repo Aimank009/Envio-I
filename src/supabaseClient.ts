@@ -25,6 +25,32 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ============================================
+// Helper function for idempotent upserts
+// ============================================
+async function upsertEvent(
+  table: string,
+  data: Record<string, any>,
+  eventName: string
+) {
+  try {
+    const { data: result, error } = await supabase
+      .from(table)
+      .upsert([data], { onConflict: 'event_id', ignoreDuplicates: true });
+
+    if (error) {
+      console.error(`❌ Supabase upsert error (${eventName}):`, error);
+      return { success: false, error };
+    }
+
+    console.log(`✅ ${eventName} sent to Supabase`);
+    return { success: true, data: result };
+  } catch (error: any) {
+    console.error(`❌ Supabase error (${eventName}):`, error.message);
+    return { success: false, error };
+  }
+}
+
+// ============================================
 // ChronoGrid Event Handlers (12 functions)
 // ============================================
 
@@ -38,31 +64,16 @@ export async function insertAutoClaimFailed(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('auto_claim_failed')
-      .insert([{
-        event_id: data.id,
-        user_address: data.user,
-        grid_id: data.gridId,
-        timeperiod_id: data.timeperiodId,
-        reason: data.reason,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (AutoClaimFailed):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ AutoClaimFailed sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (AutoClaimFailed):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('auto_claim_failed', {
+    event_id: data.id,
+    user_address: data.user,
+    grid_id: data.gridId,
+    timeperiod_id: data.timeperiodId,
+    reason: data.reason,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'AutoClaimFailed');
 }
 
 // 2. AutoClaimSkipped
@@ -74,30 +85,15 @@ export async function insertAutoClaimSkipped(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('auto_claim_skipped')
-      .insert([{
-        event_id: data.id,
-        user_address: data.user,
-        grid_id: data.gridId,
-        timeperiod_id: data.timeperiodId,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (AutoClaimSkipped):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ AutoClaimSkipped sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (AutoClaimSkipped):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('auto_claim_skipped', {
+    event_id: data.id,
+    user_address: data.user,
+    grid_id: data.gridId,
+    timeperiod_id: data.timeperiodId,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'AutoClaimSkipped');
 }
 
 // 3. BetPlaced (ChronoGrid)
@@ -116,37 +112,22 @@ export async function insertBetPlaced(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('bet_placed')
-      .insert([{
-        event_id: data.id,
-        user_address: data.user,
-        grid_id: data.gridId,
-        timeperiod_id: data.timeperiodId,
-        amount_paid: data.amountPaid,
-        shares_received: data.sharesReceived,
-        price_per_share: data.pricePerShare,
-        b_at_entry: data.bAtEntry,
-        total_share: data.totalshare,
-        price_min: data.priceMin,
-        price_max: data.priceMax,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (BetPlaced):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ BetPlaced sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (BetPlaced):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('bet_placed', {
+    event_id: data.id,
+    user_address: data.user,
+    grid_id: data.gridId,
+    timeperiod_id: data.timeperiodId,
+    amount_paid: data.amountPaid,
+    shares_received: data.sharesReceived,
+    price_per_share: data.pricePerShare,
+    b_at_entry: data.bAtEntry,
+    total_share: data.totalshare,
+    price_min: data.priceMin,
+    price_max: data.priceMax,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'BetPlaced');
 }
 
 // 4. GlobalLiquidityAdded
@@ -157,29 +138,14 @@ export async function insertGlobalLiquidityAdded(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('global_liquidity_added')
-      .insert([{
-        event_id: data.id,
-        amount: data.amount,
-        new_total: data.newTotal,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (GlobalLiquidityAdded):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ GlobalLiquidityAdded sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (GlobalLiquidityAdded):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('global_liquidity_added', {
+    event_id: data.id,
+    amount: data.amount,
+    new_total: data.newTotal,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'GlobalLiquidityAdded');
 }
 
 // 4b. GlobalLiquidityUpdated
@@ -189,28 +155,13 @@ export async function insertGlobalLiquidityUpdated(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('global_liquidity_updated')
-      .insert([{
-        event_id: data.id,
-        new_total: data.newTotal,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (GlobalLiquidityUpdated):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ GlobalLiquidityUpdated sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (GlobalLiquidityUpdated):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('global_liquidity_updated', {
+    event_id: data.id,
+    new_total: data.newTotal,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'GlobalLiquidityUpdated');
 }
 
 // 5. GridCreated
@@ -223,31 +174,16 @@ export async function insertGridCreated(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('grid_created')
-      .insert([{
-        event_id: data.id,
-        grid_id: data.gridId,
-        timeperiod_id: data.timeperiodId,
-        price_min: data.priceMin,
-        price_max: data.priceMax,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (GridCreated):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ GridCreated sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (GridCreated):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('grid_created', {
+    event_id: data.id,
+    grid_id: data.gridId,
+    timeperiod_id: data.timeperiodId,
+    price_min: data.priceMin,
+    price_max: data.priceMax,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'GridCreated');
 }
 
 // 6. MaxBetAmountUpdated
@@ -258,29 +194,14 @@ export async function insertMaxBetAmountUpdated(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('max_bet_amount_updated')
-      .insert([{
-        event_id: data.id,
-        old_amount: data.oldAmount,
-        new_amount: data.newAmount,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (MaxBetAmountUpdated):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ MaxBetAmountUpdated sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (MaxBetAmountUpdated):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('max_bet_amount_updated', {
+    event_id: data.id,
+    old_amount: data.oldAmount,
+    new_amount: data.newAmount,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'MaxBetAmountUpdated');
 }
 
 // 7. OwnershipTransferred
@@ -291,29 +212,14 @@ export async function insertOwnershipTransferred(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('ownership_transferred')
-      .insert([{
-        event_id: data.id,
-        previous_owner: data.previousOwner,
-        new_owner: data.newOwner,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (OwnershipTransferred):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ OwnershipTransferred sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (OwnershipTransferred):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('ownership_transferred', {
+    event_id: data.id,
+    previous_owner: data.previousOwner,
+    new_owner: data.newOwner,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'OwnershipTransferred');
 }
 
 // 8. TimeperiodCreated
@@ -327,32 +233,17 @@ export async function insertTimeperiodCreated(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('timeperiod_created')
-      .insert([{
-        event_id: data.id,
-        timeperiod_id: data.timeperiodId,
-        start_time: data.startTime,
-        end_time: data.endTime,
-        reference_price: data.referencePrice,
-        allocated_liquidity: data.allocatedLiquidity,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (TimeperiodCreated):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ TimeperiodCreated sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (TimeperiodCreated):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('timeperiod_created', {
+    event_id: data.id,
+    timeperiod_id: data.timeperiodId,
+    start_time: data.startTime,
+    end_time: data.endTime,
+    reference_price: data.referencePrice,
+    allocated_liquidity: data.allocatedLiquidity,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'TimeperiodCreated');
 }
 
 // 9. TimeperiodFinalized
@@ -365,31 +256,16 @@ export async function insertTimeperiodFinalized(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('timeperiod_finalized')
-      .insert([{
-        event_id: data.id,
-        timeperiod_id: data.timeperiodId,
-        net_result: data.netResult,
-        returned_to_global: data.returnedToGlobal,
-        new_global_pool: data.newGlobalPool,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (TimeperiodFinalized):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ TimeperiodFinalized sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (TimeperiodFinalized):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('timeperiod_finalized', {
+    event_id: data.id,
+    timeperiod_id: data.timeperiodId,
+    net_result: data.netResult,
+    returned_to_global: data.returnedToGlobal,
+    new_global_pool: data.newGlobalPool,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'TimeperiodFinalized');
 }
 
 // 10. TimeperiodSettled
@@ -404,33 +280,18 @@ export async function insertTimeperiodSettled(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('timeperiod_settled')
-      .insert([{
-        event_id: data.id,
-        timeperiod_id: data.timeperiodId,
-        winning_grid_id: data.winningGridId,
-        twap_price: data.twapPrice,
-        total_loser_bets: data.totalLoserBets,
-        pool_share: data.poolShare,
-        winner_share: data.winnerShare,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (TimeperiodSettled):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ TimeperiodSettled sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (TimeperiodSettled):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('timeperiod_settled', {
+    event_id: data.id,
+    timeperiod_id: data.timeperiodId,
+    winning_grid_id: data.winningGridId,
+    twap_price: data.twapPrice,
+    total_loser_bets: data.totalLoserBets,
+    pool_share: data.poolShare,
+    winner_share: data.winnerShare,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'TimeperiodSettled');
 }
 
 // 11. WinningsClaimedEqual
@@ -444,32 +305,17 @@ export async function insertWinningsClaimedEqual(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('winnings_claimed_equal')
-      .insert([{
-        event_id: data.id,
-        user_address: data.user,
-        grid_id: data.gridId,
-        equal_share: data.equalShare,
-        redemption_value: data.redemptionValue,
-        total_payout: data.totalPayout,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (WinningsClaimedEqual):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ WinningsClaimedEqual sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (WinningsClaimedEqual):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('winnings_claimed_equal', {
+    event_id: data.id,
+    user_address: data.user,
+    grid_id: data.gridId,
+    equal_share: data.equalShare,
+    redemption_value: data.redemptionValue,
+    total_payout: data.totalPayout,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'WinningsClaimedEqual');
 }
 
 // 12. WrapperSet
@@ -480,29 +326,14 @@ export async function insertWrapperSet(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('wrapper_set')
-      .insert([{
-        event_id: data.id,
-        old_wrapper: data.oldWrapper,
-        new_wrapper: data.newWrapper,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (WrapperSet):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ WrapperSet sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (WrapperSet):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('wrapper_set', {
+    event_id: data.id,
+    old_wrapper: data.oldWrapper,
+    new_wrapper: data.newWrapper,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'WrapperSet');
 }
 
 // ============================================
@@ -525,37 +356,22 @@ export async function insertBetPlacedWithSession(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('bet_placed_with_session')
-      .insert([{
-        event_id: data.id,
-        user_address: data.user,
-        session_key: data.sessionKey,
-        timeperiod_id: data.timeperiodId,
-        amount: data.amount,
-        shares_received: data.sharesReceived,
-        price_min: data.priceMin,
-        price_max: data.priceMax,
-        start_time: data.startTime,
-        end_time: data.endTime,
-        grid_id: data.gridId,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (BetPlacedWithSession):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ BetPlacedWithSession sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (BetPlacedWithSession):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('bet_placed_with_session', {
+    event_id: data.id,
+    user_address: data.user,
+    session_key: data.sessionKey,
+    timeperiod_id: data.timeperiodId,
+    amount: data.amount,
+    shares_received: data.sharesReceived,
+    price_min: data.priceMin,
+    price_max: data.priceMax,
+    start_time: data.startTime,
+    end_time: data.endTime,
+    grid_id: data.gridId,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'BetPlacedWithSession');
 }
 
 // 14. Deposited
@@ -567,30 +383,15 @@ export async function insertDeposited(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('deposited')
-      .insert([{
-        event_id: data.id,
-        user_address: data.user,
-        amount: data.amount,
-        new_balance: data.newBalance,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (Deposited):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ Deposited sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (Deposited):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('deposited', {
+    event_id: data.id,
+    user_address: data.user,
+    amount: data.amount,
+    new_balance: data.newBalance,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'Deposited');
 }
 
 // 15. EIP712DomainChanged
@@ -599,27 +400,12 @@ export async function insertEIP712DomainChanged(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('eip712_domain_changed')
-      .insert([{
-        event_id: data.id,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (EIP712DomainChanged):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ EIP712DomainChanged sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (EIP712DomainChanged):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('eip712_domain_changed', {
+    event_id: data.id,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'EIP712DomainChanged');
 }
 
 // 15b. FinalBalance
@@ -630,29 +416,14 @@ export async function insertFinalBalance(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('final_balance')
-      .insert([{
-        event_id: data.id,
-        user_address: data.user,
-        new_balance: data.newBalance,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (FinalBalance):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ FinalBalance sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (FinalBalance):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('final_balance', {
+    event_id: data.id,
+    user_address: data.user,
+    new_balance: data.newBalance,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'FinalBalance');
 }
 
 // 16. RelayerUpdated
@@ -663,29 +434,14 @@ export async function insertRelayerUpdated(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('relayer_updated')
-      .insert([{
-        event_id: data.id,
-        old_relayer: data.oldRelayer,
-        new_relayer: data.newRelayer,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (RelayerUpdated):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ RelayerUpdated sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (RelayerUpdated):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('relayer_updated', {
+    event_id: data.id,
+    old_relayer: data.oldRelayer,
+    new_relayer: data.newRelayer,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'RelayerUpdated');
 }
 
 // 17. Withdrawn
@@ -697,30 +453,15 @@ export async function insertWithdrawn(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('withdrawn')
-      .insert([{
-        event_id: data.id,
-        user_address: data.user,
-        amount: data.amount,
-        new_balance: data.newBalance,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (Withdrawn):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ Withdrawn sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (Withdrawn):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('withdrawn', {
+    event_id: data.id,
+    user_address: data.user,
+    amount: data.amount,
+    new_balance: data.newBalance,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'Withdrawn');
 }
 
 // 18. UpdatedPnl
@@ -731,27 +472,12 @@ export async function insertUpdatedPnl(data: {
   blockNumber?: number;
   timestamp?: string;
 }) {
-  try {
-    const { data: result, error } = await supabase
-      .from('updated_pnl')
-      .insert([{
-        event_id: data.id,
-        user_address: data.user,
-        pnl: data.pnl,
-        block_number: data.blockNumber,
-        timestamp: data.timestamp,
-        created_at: new Date().toISOString(),
-      }]);
-
-    if (error) {
-      console.error('❌ Supabase insert error (UpdatedPnl):', error);
-      return { success: false, error };
-    }
-
-    console.log('✅ UpdatedPnl sent to Supabase');
-    return { success: true, data: result };
-  } catch (error: any) {
-    console.error('❌ Supabase error (UpdatedPnl):', error.message);
-    return { success: false, error };
-  }
+  return upsertEvent('updated_pnl', {
+    event_id: data.id,
+    user_address: data.user,
+    pnl: data.pnl,
+    block_number: data.blockNumber,
+    timestamp: data.timestamp,
+    created_at: new Date().toISOString(),
+  }, 'UpdatedPnl');
 }
